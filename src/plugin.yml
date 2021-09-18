@@ -1,0 +1,23 @@
+name: SingleTetris
+main: me.kenandwicky.tetris.Tetris
+author: KenKwokandWickyYiu
+description: A funny Tetris Game with Single Player
+version: 1.0
+api-version: 1.13
+
+commands:
+  settetris:
+   usage: /<command>
+   description: To build the tetris
+  initializetetris:
+   usage: /<command>
+   description: Bug testing command when reloading the server
+  gamestart:
+   usage: /<command>
+   description: To allow the game start  
+   
+permissions:
+ SingleTetris.Builder:
+  description: Builder of Single Tetris.
+  default: op
+  
