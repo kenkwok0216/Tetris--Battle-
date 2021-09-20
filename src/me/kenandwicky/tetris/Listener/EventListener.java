@@ -1,5 +1,6 @@
 package me.kenandwicky.tetris.Listener;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -39,6 +40,11 @@ public class EventListener implements Listener {
     public void onPlayerJoing(PlayerJoinEvent e) {
     	Board.initialize(e.getPlayer(), settings);
     	if (e.getPlayer().getGameMode() == GameMode.ADVENTURE) {
+    		if(Bukkit.getOnlinePlayers().size() == 1) {
+    			Board.player1 = e.getPlayer();  
+    		} else {
+    			Board.player2 = e.getPlayer();
+    		}
     		Board.NameUpdate(e.getPlayer().getName());
     		ItemStack item = new ItemStack(Material.STICK, 1);
     		ItemMeta meta = item.getItemMeta();

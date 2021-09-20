@@ -15,10 +15,11 @@ import me.kenandwicky.tetris.tools.RandomClass;
 public class Board {
 		
 	private static SettingsManager settings;
-	public static Player player;
+	public static Player player, player1, player2;
 	private static TetrominoType[] bag = new TetrominoType[4];
 	private static int NextPositionX, NextPositionY, NextPositionZ;
-	private static int NamePositionX, NamePositionY, NamePositionZ;
+	private static int NamePositionX1, NamePositionY1, NamePositionZ1;
+	private static int NamePositionX2, NamePositionY2, NamePositionZ2;
 	private static int HoldPositionX, HoldPositionY, HoldPositionZ;
 	private static int BoardPositionX, BoardPositionY, BoardPositionZ;
 	private static int ScorePositionX, ScorePositionY, ScorePositionZ;
@@ -65,9 +66,9 @@ public class Board {
 			Bukkit.getWorld(worldname).getBlockAt(x, y, z).setType(Material.AIR);
 			x -= 33;
 			Bukkit.getWorld(worldname).getBlockAt(x, y, z).setType(Material.AIR);
-			x = settings.getData().getInt("Player1Position.X") + 16;
-			y = settings.getData().getInt("Player1Position.Y") - 17;
-			z = settings.getData().getInt("Player1Position.Z") + 32;
+			x = settings.getData().getInt("Player2Position.X") + 16;
+			y = settings.getData().getInt("Player2Position.Y") - 17;
+			z = settings.getData().getInt("Player2Position.Z") + 32;
 			for (int i = 0; i <= 64; i++) {
 				for (int j = 0; j <= 25; j++) {
 					if (Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).getType() == Material.RED_CONCRETE) {
@@ -264,22 +265,50 @@ public class Board {
 	}
 	
 	public static void NameUpdate(String s) {
-		int x = NamePositionX;
-		int y = NamePositionY;
-		int z = NamePositionZ;
 		String reverse = "";
-		for(int i = s.length() - 1; i >= 0; i--) {
-			if(s.charAt(i) >= 'a' && s.charAt(i) <= 'z') {
-				reverse = reverse + (char) (s.charAt(i) - ('a' - 'A'));
-			} else {
-				reverse = reverse + s.charAt(i);
-			}	
-		}
-		for(int i = 0; i < s.length(); i++) {
-			BuildBanner(new Location(player.getWorld(), x + i, y, z), reverse.charAt(i));
-		}
-		for(int i = 0; i < 18 - s.length(); i++) {
-			BuildBanner(new Location(player.getWorld(), x + i + s.length(), y, z), '?');
+		//name position 1
+		NamePositionX1 = settings.getData().getInt("NamePosition1.X");
+		NamePositionY1 = settings.getData().getInt("NamePosition1.Y");
+		NamePositionZ1 = settings.getData().getInt("NamePosition1.Z");
+		//name position 2
+		NamePositionX2 = settings.getData().getInt("NamePosition2.X");
+		NamePositionY2 = settings.getData().getInt("NamePosition2.Y");
+		NamePositionZ2 = settings.getData().getInt("NamePosition2.Z");
+		if(s == player1.getName()) {
+			
+			int x = NamePositionX1;
+			int y = NamePositionY1;
+			int z = NamePositionZ1;
+			for(int i = s.length() - 1; i >= 0; i--) {
+				if(s.charAt(i) >= 'a' && s.charAt(i) <= 'z') {
+					reverse = reverse + (char) (s.charAt(i) - ('a' - 'A'));
+				} else {
+					reverse = reverse + s.charAt(i);
+				}	
+			}
+			for(int i = 0; i < s.length(); i++) {
+				BuildBanner(new Location(player.getWorld(), x + i, y, z), reverse.charAt(i));
+			}
+			for(int i = 0; i < 18 - s.length(); i++) {
+				BuildBanner(new Location(player.getWorld(), x + i + s.length(), y, z), '?');
+			}
+		} else if (s == player2.getName()) {
+			int x = NamePositionX2;
+			int y = NamePositionY2;
+			int z = NamePositionZ2;
+			for(int i = s.length() - 1; i >= 0; i--) {
+				if(s.charAt(i) >= 'a' && s.charAt(i) <= 'z') {
+					reverse = reverse + (char) (s.charAt(i) - ('a' - 'A'));
+				} else {
+					reverse = reverse + s.charAt(i);
+				}	
+			}
+			for(int i = 0; i < s.length(); i++) {
+				BuildBanner(new Location(player.getWorld(), x + i, y, z), reverse.charAt(i));
+			}
+			for(int i = 0; i < 18 - s.length(); i++) {
+				BuildBanner(new Location(player.getWorld(), x + i + s.length(), y, z), '?');
+			}
 		}
 	}
 	
@@ -409,10 +438,7 @@ public class Board {
 		HoldPositionZ = settings.getData().getInt("HoldPosition.Z") + 1;
 		BoardPositionX = settings.getData().getInt("BoardPosition.X");
 		BoardPositionY = settings.getData().getInt("BoardPosition.Y");
-		BoardPositionZ = settings.getData().getInt("BoardPosition.Z") + 1;
-		NamePositionX = settings.getData().getInt("NamePosition.X");
-		NamePositionY = settings.getData().getInt("NamePosition.Y");
-		NamePositionZ = settings.getData().getInt("NamePosition.Z");
+		BoardPositionZ = settings.getData().getInt("BoardPosition.Z") + 1;		
 		ScorePositionX = settings.getData().getInt("ScorePosition.X") - 7;
 		ScorePositionY = settings.getData().getInt("ScorePosition.Y");
 		ScorePositionZ = settings.getData().getInt("ScorePosition.Z");
