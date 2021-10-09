@@ -21,7 +21,6 @@ public class Tetris extends JavaPlugin {
 	public static boolean isStart = false;
 	
 	
-	
 	public void onEnable() {
 		Bukkit.getServer().getConsoleSender().sendMessage("Tetris is working");
 		Bukkit.getServer().getPluginManager().registerEvents(new EventListener(), this);
@@ -48,17 +47,20 @@ public class Tetris extends JavaPlugin {
 		if (cmd.getName().equalsIgnoreCase("initializetetris")) {
 			Board.initialize(player, settings);
 			boardclass.Boardsetup();
-			
 		}
 		
 		if(cmd.getName().equalsIgnoreCase("settetris")) {
 			boardclass.building(player, settings);	
 		}
 		
-		if(cmd.getName().equalsIgnoreCase("next")) {
-			boardclass.NextPiece(player);	
+		if(cmd.getName().equalsIgnoreCase("start")) {
+			game = new Game(boardclass);
+			isStart = true;
 		}
 		
+		if(cmd.getName().equalsIgnoreCase("next")) {
+			game.Next(player);	
+		}
 		
 		if(cmd.getName().equalsIgnoreCase("hold")) {
 			boardclass.HoldBox(player);	
