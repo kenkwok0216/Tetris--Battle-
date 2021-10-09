@@ -46,7 +46,8 @@ public class Tetris extends JavaPlugin {
 		}
 		
 		if (cmd.getName().equalsIgnoreCase("initializetetris")) {
-			Board.initialize(player, settings);	
+			Board.initialize(player, settings);
+			boardclass.Boardsetup();
 		}
 		
 		if(cmd.getName().equalsIgnoreCase("settetris")) {
@@ -55,6 +56,11 @@ public class Tetris extends JavaPlugin {
 		
 		if(cmd.getName().equalsIgnoreCase("next")) {
 			boardclass.NextPiece(player);	
+		}
+		
+		
+		if(cmd.getName().equalsIgnoreCase("hold")) {
+			boardclass.HoldBox(player);	
 		}
 			
 		

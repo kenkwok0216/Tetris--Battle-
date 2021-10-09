@@ -23,19 +23,22 @@ public class Board {
 	private static int NextPositionX2, NextPositionY2, NextPositionZ2;
 	private static int NamePositionX1, NamePositionY1, NamePositionZ1;
 	private static int NamePositionX2, NamePositionY2, NamePositionZ2;
+	private static int HoldPositionX1, HoldPositionY1, HoldPositionZ1;
+	private static int HoldPositionX2, HoldPositionY2, HoldPositionZ2;
 	
-	private static int HoldPositionX, HoldPositionY, HoldPositionZ;
 	private static int BoardPositionX, BoardPositionY, BoardPositionZ;
 	private static int ScorePositionX, ScorePositionY, ScorePositionZ;
 	private static int LinePositionX, LinePositionY, LinePositionZ;
 	private static int LevelPositionX, LevelPositionY, LevelPositionZ;
 	private static int playerscore, playerlevel, playerline;
-	public static Tetromino currentpiece;
-	public static Tetromino holdpiece;
+	public static Tetromino currentpiece1, currentpiece2;
+	public static Tetromino currentpiece = new Tetromino(TetrominoType.values()[1]);
+	
+	public static Tetromino holdpiece1, holdpiece2;
 	
 	
 	private RandomClass rnd = new RandomClass();
-	private boolean isHold = false;
+	private boolean isHold1 = false, isHold2 = false;
 	public static TetrominoType[][] board = new TetrominoType[10][21];
 	
 	public void building(Player player, SettingsManager settings) {
@@ -141,13 +144,15 @@ public class Board {
 		}	
 	}
 	
+	
+	//This is done ---- Delete this line after done
 	public void NextPiece(Player p) {
 		if (p.getName() == player1.getName()) {
 			if (bag1[0] == null) {
 				int y = rnd.TetrisRandom();
 				TetrominoType starttype = TetrominoType.values()[y];
 				Tetromino startpiece = new Tetromino(starttype);
-				currentpiece = startpiece;
+				currentpiece1 = startpiece;
 				for (int i = 1; i < 5; i++) {		
 					int x = rnd.TetrisRandom();
 					TetrominoType type = TetrominoType.values()[x];
@@ -161,7 +166,7 @@ public class Board {
 				}
 			} else {
 				Tetromino nextpiece = new Tetromino(bag1[0]);
-				currentpiece = nextpiece;
+				currentpiece1 = nextpiece;
 				for (int i = 0; i < 3; i++) {
 					bag1[i] = bag1[i+1];
 				}
@@ -181,7 +186,7 @@ public class Board {
 				int y = rnd.TetrisRandom();
 				TetrominoType starttype = TetrominoType.values()[y];
 				Tetromino startpiece = new Tetromino(starttype);
-				currentpiece = startpiece;
+				currentpiece2 = startpiece;
 				for (int i = 1; i < 5; i++) {		
 					int x = rnd.TetrisRandom();
 					TetrominoType type = TetrominoType.values()[x];
@@ -195,7 +200,7 @@ public class Board {
 				}
 			} else {
 				Tetromino nextpiece = new Tetromino(bag2[0]);
-				currentpiece = nextpiece;
+				currentpiece2 = nextpiece;
 				for (int i = 0; i < 3; i++) {
 					bag2[i] = bag2[i+1];
 				}
@@ -223,49 +228,96 @@ public class Board {
         }
 	}
 	
+	//This is done ---- Delete this line after done
 	public void HoldBox(Player p) {
-		if(isHold == false) {
-			Tetromino piece = currentpiece;
-			TetrominoType type = currentpiece.type;
-			if(type != TetrominoType.I) {
-				setPieceBlocks(HoldPositionX, HoldPositionY, HoldPositionZ, piece, type);
-				holdpiece = piece;
-				NextPiece(p);
-				isHold = true;
-			} else {
-				if(currentpiece.coords[3][1] == -1) { //this will happen if coords is {{-1,2}, {-1,1}, {-1,0}, {-1,1}}
-					setPieceBlocks(HoldPositionX, HoldPositionY + 1, HoldPositionZ, piece, type);
-					holdpiece = piece;
+		if(p.getName() == player1.getName()) {
+			if(isHold1 == false) {
+				Tetromino piece = currentpiece1;
+				TetrominoType type = currentpiece1.type;
+				if(type != TetrominoType.I) {
+					setPieceBlocks(HoldPositionX1, HoldPositionY1, HoldPositionZ1, piece, type);
+					holdpiece1 = piece;
 					NextPiece(p);
-					isHold = true;
+					isHold1 = true;
 				} else {
-					setPieceBlocks(HoldPositionX, HoldPositionY, HoldPositionZ, piece, type);
-					holdpiece = piece;
-					NextPiece(p);
-					isHold = true;
+					if(currentpiece1.coords[3][1] == -1) { //this will happen if coords is {{-1,2}, {-1,1}, {-1,0}, {-1,1}}
+						setPieceBlocks(HoldPositionX1, HoldPositionY1 + 1, HoldPositionZ1, piece, type);
+						holdpiece1 = piece;
+						NextPiece(p);
+						isHold1 = true;
+					} else {
+						setPieceBlocks(HoldPositionX1, HoldPositionY1, HoldPositionZ1, piece, type);
+						holdpiece1 = piece;
+						NextPiece(p);
+						isHold1 = true;
+					}
 				}
-			}
-		} else {
-			Tetromino tmppiece = currentpiece;
-			currentpiece = holdpiece;
-			holdpiece = tmppiece;
-			if(holdpiece.type != TetrominoType.I) {
-				ClearPieceinBox(HoldPositionX, HoldPositionY, HoldPositionZ);
-				ClearPieceinBox(HoldPositionX + 1, HoldPositionY, HoldPositionZ);
-				setPieceBlocks(HoldPositionX, HoldPositionY, HoldPositionZ, holdpiece, holdpiece.type);	 
 			} else {
-				if(holdpiece.coords[3][1] == -1) { //this will happen if coords is {{-1,2}, {-1,1}, {-1,0}, {-1,1}}
-					ClearPieceinBox(HoldPositionX, HoldPositionY, HoldPositionZ);
-					ClearPieceinBox(HoldPositionX + 1, HoldPositionY, HoldPositionZ);
-					setPieceBlocks(HoldPositionX, HoldPositionY + 1, HoldPositionZ, holdpiece, holdpiece.type);	 
+				Tetromino tmppiece = currentpiece1;
+				currentpiece1 = holdpiece1;
+				holdpiece1 = tmppiece;
+				if(holdpiece1.type != TetrominoType.I) {
+					ClearPieceinBox(HoldPositionX1, HoldPositionY1, HoldPositionZ1);
+					ClearPieceinBox(HoldPositionX1 + 1, HoldPositionY1, HoldPositionZ1);
+					setPieceBlocks(HoldPositionX1, HoldPositionY1, HoldPositionZ1, holdpiece1, holdpiece1.type);	 
 				} else {
-					ClearPieceinBox(HoldPositionX, HoldPositionY, HoldPositionZ);
-					ClearPieceinBox(HoldPositionX + 1, HoldPositionY, HoldPositionZ);
-					setPieceBlocks(HoldPositionX, HoldPositionY, HoldPositionZ, holdpiece, holdpiece.type);	 
-				}
-			}		
+					if(holdpiece1.coords[3][1] == -1) { //this will happen if coords is {{-1,2}, {-1,1}, {-1,0}, {-1,1}}
+						ClearPieceinBox(HoldPositionX1, HoldPositionY1, HoldPositionZ1);
+						ClearPieceinBox(HoldPositionX1 + 1, HoldPositionY1, HoldPositionZ1);
+						setPieceBlocks(HoldPositionX1, HoldPositionY1 + 1, HoldPositionZ1, holdpiece1, holdpiece1.type);	 
+					} else {
+						ClearPieceinBox(HoldPositionX1, HoldPositionY1, HoldPositionZ1);
+						ClearPieceinBox(HoldPositionX1 + 1, HoldPositionY1, HoldPositionZ1);
+						setPieceBlocks(HoldPositionX1, HoldPositionY1, HoldPositionZ1, holdpiece1, holdpiece1.type);	 
+					}
+				}		
 
+			}
+		} else if (p.getName() == player2.getName()) {
+			if(isHold2 == false) {
+				Tetromino piece = currentpiece2;
+				TetrominoType type = currentpiece2.type;
+				if(type != TetrominoType.I) {
+					setPieceBlocks(HoldPositionX2, HoldPositionY2, HoldPositionZ2, piece, type);
+					holdpiece2 = piece;
+					NextPiece(p);
+					isHold2 = true;
+				} else {
+					if(currentpiece2.coords[3][1] == -1) { //this will happen if coords is {{-1,2}, {-1,1}, {-1,0}, {-1,1}}
+						setPieceBlocks(HoldPositionX2, HoldPositionY2 + 1, HoldPositionZ2, piece, type);
+						holdpiece2 = piece;
+						NextPiece(p);
+						isHold2 = true;
+					} else {
+						setPieceBlocks(HoldPositionX2, HoldPositionY2, HoldPositionZ2, piece, type);
+						holdpiece2 = piece;
+						NextPiece(p);
+						isHold2 = true;
+					}
+				}
+			} else {
+				Tetromino tmppiece = currentpiece2;
+				currentpiece2 = holdpiece2;
+				holdpiece2 = tmppiece;
+				if(holdpiece2.type != TetrominoType.I) {
+					ClearPieceinBox(HoldPositionX2, HoldPositionY2, HoldPositionZ2);
+					ClearPieceinBox(HoldPositionX2 + 1, HoldPositionY2, HoldPositionZ2);
+					setPieceBlocks(HoldPositionX2, HoldPositionY2, HoldPositionZ2, holdpiece2, holdpiece2.type);	 
+				} else {
+					if(holdpiece2.coords[3][1] == -1) { //this will happen if coords is {{-1,2}, {-1,1}, {-1,0}, {-1,1}}
+						ClearPieceinBox(HoldPositionX2, HoldPositionY2, HoldPositionZ2);
+						ClearPieceinBox(HoldPositionX2 + 1, HoldPositionY2, HoldPositionZ2);
+						setPieceBlocks(HoldPositionX2, HoldPositionY2 + 1, HoldPositionZ2, holdpiece2, holdpiece2.type);	 
+					} else {
+						ClearPieceinBox(HoldPositionX2, HoldPositionY2, HoldPositionZ2);
+						ClearPieceinBox(HoldPositionX2 + 1, HoldPositionY2, HoldPositionZ2);
+						setPieceBlocks(HoldPositionX2, HoldPositionY2, HoldPositionZ2, holdpiece2, holdpiece2.type);	 
+					}
+				}		
+
+			}
 		}
+
 	}
 	
 	
@@ -304,6 +356,7 @@ public class Board {
 		}		
 	}
 	
+	//This is done ---- Delete this line after done
 	public static void NameUpdate(String s) {
 		String reverse = "";
 		//name position 1
@@ -473,9 +526,13 @@ public class Board {
 
 	public void Boardsetup() {
 		settings.reloadConfig();
-		HoldPositionX = settings.getData().getInt("HoldPosition.X") - 1;
-		HoldPositionY = settings.getData().getInt("HoldPosition.Y");
-		HoldPositionZ = settings.getData().getInt("HoldPosition.Z") + 1;
+		HoldPositionX1 = settings.getData().getInt("HoldPosition1.X") - 1;
+		HoldPositionY1 = settings.getData().getInt("HoldPosition1.Y");
+		HoldPositionZ1 = settings.getData().getInt("HoldPosition1.Z") + 1;
+		HoldPositionX2 = settings.getData().getInt("HoldPosition2.X") - 1;
+		HoldPositionY2 = settings.getData().getInt("HoldPosition2.Y");
+		HoldPositionZ2 = settings.getData().getInt("HoldPosition2.Z") + 1;
+		
 		BoardPositionX = settings.getData().getInt("BoardPosition.X");
 		BoardPositionY = settings.getData().getInt("BoardPosition.Y");
 		BoardPositionZ = settings.getData().getInt("BoardPosition.Z") + 1;		
@@ -500,8 +557,10 @@ public class Board {
 				setBlock(BoardPositionX - i, BoardPositionY + j, BoardPositionZ, board[i][j]);
 			}
 		}
-		ClearPieceinBox(HoldPositionX, HoldPositionY, HoldPositionZ);
-		ClearPieceinBox(HoldPositionX + 1, HoldPositionY, HoldPositionZ); //due to rotation, the position may be larger
+		ClearPieceinBox(HoldPositionX1, HoldPositionY1, HoldPositionZ1);
+		ClearPieceinBox(HoldPositionX1 + 1, HoldPositionY1, HoldPositionZ1); //due to rotation, the position may be larger
+		ClearPieceinBox(HoldPositionX2, HoldPositionY2, HoldPositionZ2);
+		ClearPieceinBox(HoldPositionX2 + 1, HoldPositionY2, HoldPositionZ2); //due to rotation, the position may be larger
 	}
 
 	public static void LineCheck() {
