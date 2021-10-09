@@ -25,21 +25,23 @@ public class Board {
 	private static int NamePositionX2, NamePositionY2, NamePositionZ2;
 	private static int HoldPositionX1, HoldPositionY1, HoldPositionZ1;
 	private static int HoldPositionX2, HoldPositionY2, HoldPositionZ2;
+	private static int BoardPositionX1, BoardPositionY1, BoardPositionZ1;
+	private static int BoardPositionX2, BoardPositionY2, BoardPositionZ2;
 	
-	private static int BoardPositionX, BoardPositionY, BoardPositionZ;
 	private static int ScorePositionX, ScorePositionY, ScorePositionZ;
 	private static int LinePositionX, LinePositionY, LinePositionZ;
 	private static int LevelPositionX, LevelPositionY, LevelPositionZ;
 	private static int playerscore, playerlevel, playerline;
 	public static Tetromino currentpiece1, currentpiece2;
-	public static Tetromino currentpiece = new Tetromino(TetrominoType.values()[1]);
 	
 	public static Tetromino holdpiece1, holdpiece2;
 	
 	
 	private RandomClass rnd = new RandomClass();
 	private boolean isHold1 = false, isHold2 = false;
-	public static TetrominoType[][] board = new TetrominoType[10][21];
+	
+	public static TetrominoType[][] board1 = new TetrominoType[10][21];
+	public static TetrominoType[][] board2 = new TetrominoType[10][21];
 	
 	public void building(Player player, SettingsManager settings) {
 		Board.settings = settings;
@@ -49,6 +51,7 @@ public class Board {
 			settings.getData().set("Player1Position.X", (int) blockloc.getX() - 1);
 			settings.getData().set("Player1Position.Y", (int) blockloc.getY());
 			settings.getData().set("Player1Position.Z", (int) blockloc.getZ());
+			settings.getData().set("Player2Position.X", (int) blockloc.getX() - 25);
 			settings.getData().set("Player2Position.Y", (int) blockloc.getY());
 			settings.getData().set("Player2Position.Z", (int) blockloc.getZ());			
 			settings.saveData();
@@ -472,19 +475,37 @@ public class Board {
 			Board.player = player;
 	}
 	
-	public void TetrisBoard(int boardX, int boardY, Tetromino piece, TetrominoType type) {
-		int x = settings.getData().getInt("BoardPosition.X");
-		int y = settings.getData().getInt("BoardPosition.Y");
-		int z = settings.getData().getInt("BoardPosition.Z") + 1;
-		setPieceBlocks(x - boardX, y + boardY, z, piece, type);		
+	//This is done ---- Delete this line after done
+	public void TetrisBoard(int boardX, int boardY, Tetromino piece, TetrominoType type, Player p) {
+		if(p.getName() == player1.getName()) {
+			int x = settings.getData().getInt("BoardPosition1.X");
+			int y = settings.getData().getInt("BoardPosition1.Y");
+			int z = settings.getData().getInt("BoardPosition1.Z") + 1;
+			setPieceBlocks(x - boardX, y + boardY, z, piece, type);	
+		} else if(p.getName() == player2.getName()) {
+			int x = settings.getData().getInt("BoardPosition2.X");
+			int y = settings.getData().getInt("BoardPosition2.Y");
+			int z = settings.getData().getInt("BoardPosition2.Z") + 1;
+			setPieceBlocks(x - boardX, y + boardY, z, piece, type);	
+		}
+	
 	}
 	
-	public void SaveTetris(int boardX, int boardY) {
-    	for (int i = 0; i < 4; i++) {
-    		int CoordX = boardX - currentpiece.coords[i][0];
-    		int CoordY = boardY + currentpiece.coords[i][1];
-    		board[CoordX][CoordY] = currentpiece.type;
-        }	     	
+	//This is done ---- Delete this line after done
+	public void SaveTetris(int boardX, int boardY, Player p) {
+    	if(p.getName() == player1.getName()) {
+    		for (int i = 0; i < 4; i++) {
+        		int CoordX = boardX - currentpiece1.coords[i][0];
+        		int CoordY = boardY + currentpiece1.coords[i][1];
+        		board1[CoordX][CoordY] = currentpiece1.type;
+            }	
+    	} else if(p.getName() == player2.getName()) {
+    		for (int i = 0; i < 4; i++) {
+        		int CoordX = boardX - currentpiece2.coords[i][0];
+        		int CoordY = boardY + currentpiece2.coords[i][1];
+        		board2[CoordX][CoordY] = currentpiece2.type;
+            } 
+    	}
 	}
 	
 	
@@ -519,9 +540,17 @@ public class Board {
 			return false;
 		}
 	}
-
-	public TetrominoType get(int x, int y) {
-		return board[x][y];
+	
+	//This is done ---- Delete this line after done
+	public TetrominoType get(int x, int y, Player p) {
+		if(p.getPlayer() == player1.getPlayer()) {
+			return board1[x][y];
+		} else if (p.getPlayer() == player2.getPlayer()) {
+			return board2[x][y];
+		} else {
+			return null;
+		}
+		
 	}
 
 	public void Boardsetup() {
@@ -532,10 +561,13 @@ public class Board {
 		HoldPositionX2 = settings.getData().getInt("HoldPosition2.X") - 1;
 		HoldPositionY2 = settings.getData().getInt("HoldPosition2.Y");
 		HoldPositionZ2 = settings.getData().getInt("HoldPosition2.Z") + 1;
+		BoardPositionX1 = settings.getData().getInt("BoardPosition1.X");
+		BoardPositionY1 = settings.getData().getInt("BoardPosition1.Y");
+		BoardPositionZ1 = settings.getData().getInt("BoardPosition1.Z") + 1;
+		BoardPositionX2 = settings.getData().getInt("BoardPosition2.X");
+		BoardPositionY2 = settings.getData().getInt("BoardPosition2.Y");
+		BoardPositionZ2 = settings.getData().getInt("BoardPosition2.Z") + 1;
 		
-		BoardPositionX = settings.getData().getInt("BoardPosition.X");
-		BoardPositionY = settings.getData().getInt("BoardPosition.Y");
-		BoardPositionZ = settings.getData().getInt("BoardPosition.Z") + 1;		
 		ScorePositionX = settings.getData().getInt("ScorePosition.X") - 7;
 		ScorePositionY = settings.getData().getInt("ScorePosition.Y");
 		ScorePositionZ = settings.getData().getInt("ScorePosition.Z");
@@ -553,8 +585,10 @@ public class Board {
 		LineUpdate("0");
 		for(int i = 0; i < 10; i++) {
 			for(int j = 0; j < 21; j++) {
-				board[i][j] = TetrominoType.Empty;
-				setBlock(BoardPositionX - i, BoardPositionY + j, BoardPositionZ, board[i][j]);
+				board1[i][j] = TetrominoType.Empty;
+				board2[i][j] = TetrominoType.Empty;
+				setBlock(BoardPositionX1 - i, BoardPositionY1 + j, BoardPositionZ1, board1[i][j]);
+				setBlock(BoardPositionX2 - i, BoardPositionY2 + j, BoardPositionZ2, board2[i][j]);
 			}
 		}
 		ClearPieceinBox(HoldPositionX1, HoldPositionY1, HoldPositionZ1);
@@ -563,19 +597,35 @@ public class Board {
 		ClearPieceinBox(HoldPositionX2 + 1, HoldPositionY2, HoldPositionZ2); //due to rotation, the position may be larger
 	}
 
-	public static void LineCheck() {
-		int linecheck = 0;
-		for (int i = 19; i >= 0; i--) {
-			for (int j = 0; j < 10; j++) {
-				if (board[j][i] == TetrominoType.Empty) {
-					break;
-				} else if (j == 9){
-					ClearLine(i);
-					linecheck++;
+	public static void LineCheck(Player p) {
+		if(p.getName() == player1.getName()) {
+			int linecheck = 0;
+			for (int i = 19; i >= 0; i--) {
+				for (int j = 0; j < 10; j++) {
+					if (board1[j][i] == TetrominoType.Empty) {
+						break;
+					} else if (j == 9){
+						ClearLine(i, p);
+						linecheck++;
+					}
 				}
 			}
+			ScoreCalculation(linecheck);
+		} else if (p.getName() == player2.getName()) {
+			int linecheck = 0;
+			for (int i = 19; i >= 0; i--) {
+				for (int j = 0; j < 10; j++) {
+					if (board2[j][i] == TetrominoType.Empty) {
+						break;
+					} else if (j == 9){
+						ClearLine(i, p);
+						linecheck++;
+					}
+				}
+			}
+			ScoreCalculation(linecheck);
 		}
-		ScoreCalculation(linecheck);
+
 	}
 	
 	private static void ScoreCalculation(int line) {
@@ -626,13 +676,23 @@ public class Board {
 	}
 
 	//the following method is used to clear the whole line of the board
-	public static void ClearLine(int line) {
-		for (int i = 0; i < 10; i++) {
-			for (int j = line; j < 20; j++) {
-				board[i][j] = board[i][j + 1];
-				setBlock(BoardPositionX - i, BoardPositionY + j, BoardPositionZ, board[i][j + 1]);
+	public static void ClearLine(int line, Player p) {
+		if(p.getName() == player1.getName()) {
+			for (int i = 0; i < 10; i++) {
+				for (int j = line; j < 20; j++) {
+					board1[i][j] = board1[i][j + 1];
+					setBlock(BoardPositionX1 - i, BoardPositionY1 + j, BoardPositionZ1, board1[i][j + 1]);
+				}
+			}
+		} else if(p.getName() == player2.getName()) {
+			for (int i = 0; i < 10; i++) {
+				for (int j = line; j < 20; j++) {
+					board2[i][j] = board2[i][j + 1];
+					setBlock(BoardPositionX2 - i, BoardPositionY2 + j, BoardPositionZ2, board2[i][j + 1]);
+				}
 			}
 		}
+
 	}
 
 	public static int getPlayerlevel() {

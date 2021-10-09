@@ -21,6 +21,9 @@ commands:
   hold:
    usage: /<command>
    description: test
+  start:
+   usage: /<command>
+   description: test
    
 permissions:
  SingleTetris.Builder:
