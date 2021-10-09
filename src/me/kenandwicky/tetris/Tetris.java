@@ -48,6 +48,7 @@ public class Tetris extends JavaPlugin {
 		if (cmd.getName().equalsIgnoreCase("initializetetris")) {
 			Board.initialize(player, settings);
 			boardclass.Boardsetup();
+			
 		}
 		
 		if(cmd.getName().equalsIgnoreCase("settetris")) {
