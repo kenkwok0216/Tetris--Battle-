@@ -16,10 +16,14 @@ public class Board {
 		
 	private static SettingsManager settings;
 	public static Player player, player1, player2;
-	private static TetrominoType[] bag = new TetrominoType[4];
-	private static int NextPositionX, NextPositionY, NextPositionZ;
+	private static TetrominoType[] bag1 = new TetrominoType[4];
+	private static TetrominoType[] bag2 = new TetrominoType[4];
+	
+	private static int NextPositionX1, NextPositionY1, NextPositionZ1;
+	private static int NextPositionX2, NextPositionY2, NextPositionZ2;
 	private static int NamePositionX1, NamePositionY1, NamePositionZ1;
 	private static int NamePositionX2, NamePositionY2, NamePositionZ2;
+	
 	private static int HoldPositionX, HoldPositionY, HoldPositionZ;
 	private static int BoardPositionX, BoardPositionY, BoardPositionZ;
 	private static int ScorePositionX, ScorePositionY, ScorePositionZ;
@@ -42,7 +46,6 @@ public class Board {
 			settings.getData().set("Player1Position.X", (int) blockloc.getX() - 1);
 			settings.getData().set("Player1Position.Y", (int) blockloc.getY());
 			settings.getData().set("Player1Position.Z", (int) blockloc.getZ());
-			settings.getData().set("Player2Position.X", (int) blockloc.getX() - 25);
 			settings.getData().set("Player2Position.Y", (int) blockloc.getY());
 			settings.getData().set("Player2Position.Z", (int) blockloc.getZ());			
 			settings.saveData();
@@ -66,9 +69,9 @@ public class Board {
 			Bukkit.getWorld(worldname).getBlockAt(x, y, z).setType(Material.AIR);
 			x -= 33;
 			Bukkit.getWorld(worldname).getBlockAt(x, y, z).setType(Material.AIR);
-			x = settings.getData().getInt("Player2Position.X") + 16;
-			y = settings.getData().getInt("Player2Position.Y") - 17;
-			z = settings.getData().getInt("Player2Position.Z") + 32;
+			x = settings.getData().getInt("Player1Position.X") + 16;
+			y = settings.getData().getInt("Player1Position.Y") - 17;
+			z = settings.getData().getInt("Player1Position.Z") + 32;
 			for (int i = 0; i <= 64; i++) {
 				for (int j = 0; j <= 25; j++) {
 					if (Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).getType() == Material.RED_CONCRETE) {
@@ -138,40 +141,77 @@ public class Board {
 		}	
 	}
 	
-	public void NextPiece() {
-		if (bag[0] == null) {
-			int y = rnd.TetrisRandom();
-			TetrominoType starttype = TetrominoType.values()[y];
-			Tetromino startpiece = new Tetromino(starttype);
-			currentpiece = startpiece;
-			for (int i = 1; i < 5; i++) {		
+	public void NextPiece(Player p) {
+		if (p.getName() == player1.getName()) {
+			if (bag1[0] == null) {
+				int y = rnd.TetrisRandom();
+				TetrominoType starttype = TetrominoType.values()[y];
+				Tetromino startpiece = new Tetromino(starttype);
+				currentpiece = startpiece;
+				for (int i = 1; i < 5; i++) {		
+					int x = rnd.TetrisRandom();
+					TetrominoType type = TetrominoType.values()[x];
+					Tetromino piece = new Tetromino(type);
+					bag1[i - 1] = type;
+					NextPositionX1 = settings.getData().getInt("NextPosition1.X") - 1;
+					NextPositionY1 = settings.getData().getInt("NextPosition1.Y") + (4-i) * 5;
+					NextPositionZ1 = settings.getData().getInt("NextPosition1.Z") + 1;
+					ClearPieceinBox(NextPositionX1, NextPositionY1, NextPositionZ1);
+					setPieceBlocks(NextPositionX1, NextPositionY1, NextPositionZ1, piece, type);
+				}
+			} else {
+				Tetromino nextpiece = new Tetromino(bag1[0]);
+				currentpiece = nextpiece;
+				for (int i = 0; i < 3; i++) {
+					bag1[i] = bag1[i+1];
+				}
 				int x = rnd.TetrisRandom();
-				TetrominoType type = TetrominoType.values()[x];
-				Tetromino piece = new Tetromino(type);
-				bag[i - 1] = type;
-				NextPositionX = settings.getData().getInt("NextPosition.X") - 1;
-				NextPositionY = settings.getData().getInt("NextPosition.Y") + (4-i) * 5;
-				NextPositionZ = settings.getData().getInt("NextPosition.Z") + 1;
-				ClearPieceinBox(NextPositionX, NextPositionY, NextPositionZ);
-				setPieceBlocks(NextPositionX, NextPositionY, NextPositionZ, piece, type);
+				bag1[3] = TetrominoType.values()[x];
+				for (int i = 1; i < 5; i++) {
+					Tetromino piece = new Tetromino(bag1[i-1]);
+					NextPositionX1 = settings.getData().getInt("NextPosition1.X") - 1;
+					NextPositionY1 = settings.getData().getInt("NextPosition1.Y") + (4-i) * 5;
+					NextPositionZ1 = settings.getData().getInt("NextPosition1.Z") + 1;
+					ClearPieceinBox(NextPositionX1, NextPositionY1, NextPositionZ1);
+					setPieceBlocks(NextPositionX1, NextPositionY1, NextPositionZ1, piece, bag1[i-1]);
+				}
 			}
-		} else {
-			Tetromino nextpiece = new Tetromino(bag[0]);
-			currentpiece = nextpiece;
-			for (int i = 0; i < 3; i++) {
-				bag[i] = bag[i+1];
-			}
-			int x = rnd.TetrisRandom();
-			bag[3] = TetrominoType.values()[x];
-			for (int i = 1; i < 5; i++) {
-				Tetromino piece = new Tetromino(bag[i-1]);
-				NextPositionX = settings.getData().getInt("NextPosition.X") - 1;
-				NextPositionY = settings.getData().getInt("NextPosition.Y") + (4-i) * 5;
-				NextPositionZ = settings.getData().getInt("NextPosition.Z") + 1;
-				ClearPieceinBox(NextPositionX, NextPositionY, NextPositionZ);
-				setPieceBlocks(NextPositionX, NextPositionY, NextPositionZ, piece, bag[i-1]);
+		} else if (p.getName() == player2.getName()) {
+			if (bag2[0] == null) {
+				int y = rnd.TetrisRandom();
+				TetrominoType starttype = TetrominoType.values()[y];
+				Tetromino startpiece = new Tetromino(starttype);
+				currentpiece = startpiece;
+				for (int i = 1; i < 5; i++) {		
+					int x = rnd.TetrisRandom();
+					TetrominoType type = TetrominoType.values()[x];
+					Tetromino piece = new Tetromino(type);
+					bag2[i - 1] = type;
+					NextPositionX2 = settings.getData().getInt("NextPosition2.X") - 1;
+					NextPositionY2 = settings.getData().getInt("NextPosition2.Y") + (4-i) * 5;
+					NextPositionZ2 = settings.getData().getInt("NextPosition2.Z") + 1;
+					ClearPieceinBox(NextPositionX2, NextPositionY2, NextPositionZ2);
+					setPieceBlocks(NextPositionX2, NextPositionY2, NextPositionZ2, piece, type);
+				}
+			} else {
+				Tetromino nextpiece = new Tetromino(bag2[0]);
+				currentpiece = nextpiece;
+				for (int i = 0; i < 3; i++) {
+					bag2[i] = bag2[i+1];
+				}
+				int x = rnd.TetrisRandom();
+				bag2[3] = TetrominoType.values()[x];
+				for (int i = 1; i < 5; i++) {
+					Tetromino piece = new Tetromino(bag2[i-1]);
+					NextPositionX2 = settings.getData().getInt("NextPosition2.X") - 1;
+					NextPositionY2 = settings.getData().getInt("NextPosition2.Y") + (4-i) * 5;
+					NextPositionZ2 = settings.getData().getInt("NextPosition2.Z") + 1;
+					ClearPieceinBox(NextPositionX2, NextPositionY2, NextPositionZ2);
+					setPieceBlocks(NextPositionX2, NextPositionY2, NextPositionZ2, piece, bag2[i-1]);
+				}
 			}
 		}
+
 				
 	}
 	
@@ -183,25 +223,25 @@ public class Board {
         }
 	}
 	
-	public void HoldBox() {
+	public void HoldBox(Player p) {
 		if(isHold == false) {
 			Tetromino piece = currentpiece;
 			TetrominoType type = currentpiece.type;
 			if(type != TetrominoType.I) {
 				setPieceBlocks(HoldPositionX, HoldPositionY, HoldPositionZ, piece, type);
 				holdpiece = piece;
-				NextPiece();
+				NextPiece(p);
 				isHold = true;
 			} else {
 				if(currentpiece.coords[3][1] == -1) { //this will happen if coords is {{-1,2}, {-1,1}, {-1,0}, {-1,1}}
 					setPieceBlocks(HoldPositionX, HoldPositionY + 1, HoldPositionZ, piece, type);
 					holdpiece = piece;
-					NextPiece();
+					NextPiece(p);
 					isHold = true;
 				} else {
 					setPieceBlocks(HoldPositionX, HoldPositionY, HoldPositionZ, piece, type);
 					holdpiece = piece;
-					NextPiece();
+					NextPiece(p);
 					isHold = true;
 				}
 			}
@@ -542,6 +582,7 @@ public class Board {
 
 
 	public static boolean CheckLoss() {
+		/*
 		for(int i = 0; i < 10; i++) {
 			if(board[i][20] != TetrominoType.Empty) {
 				return true;
@@ -556,5 +597,8 @@ public class Board {
 		}
 		
 		return false;
+		*/
+		return false;
 	}
+	
 }

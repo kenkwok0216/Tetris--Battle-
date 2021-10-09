@@ -39,7 +39,7 @@ public class EventListener implements Listener {
     @EventHandler
     public void onPlayerJoing(PlayerJoinEvent e) {
     	Board.initialize(e.getPlayer(), settings);
-    	if (e.getPlayer().getGameMode() == GameMode.ADVENTURE) {
+    	if (e.getPlayer().getGameMode() == GameMode.ADVENTURE || 1 == 1) {
     		if(Bukkit.getOnlinePlayers().size() == 1) {
     			Board.player1 = e.getPlayer();  
     		} else {
@@ -111,7 +111,7 @@ public class EventListener implements Listener {
     	}
     	
     	if (yDiff > 0) {
-    		Game.HardDrop();
+    		Game.HardDrop(e.getPlayer());
     	}
     	
     	if (zDiff > xDiff) {
@@ -138,7 +138,7 @@ public class EventListener implements Listener {
     @EventHandler
     public static void OnPlayerSwapHandEvent(PlayerSwapHandItemsEvent e) {
     	e.setCancelled(true);
-    	Game.holdPiece();
+    	Game.holdPiece(e.getPlayer());
     }
     
     

@@ -15,6 +15,9 @@ commands:
   gamestart:
    usage: /<command>
    description: To allow the game start  
+  next:
+   usage: /<command>
+   description: test
    
 permissions:
  SingleTetris.Builder:
