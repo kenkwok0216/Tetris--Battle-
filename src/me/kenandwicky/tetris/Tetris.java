@@ -3,6 +3,7 @@ package me.kenandwicky.tetris;
 import me.kenandwicky.tetris.Board.*;
 import me.kenandwicky.tetris.GameLoop.*;
 import me.kenandwicky.tetris.Listener.EventListener;
+import me.kenandwicky.tetris.tools.TetrisPlayer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -45,8 +46,10 @@ public class Tetris extends JavaPlugin {
 		}
 		
 		if (cmd.getName().equalsIgnoreCase("initializetetris")) {
+			Board.player1 = new TetrisPlayer(player);
+			Board.player2 = new TetrisPlayer(player);
 			Board.initialize(player, settings);
-			boardclass.Boardsetup();
+			//boardclass.Boardsetup();
 		}
 		
 		if(cmd.getName().equalsIgnoreCase("settetris")) {

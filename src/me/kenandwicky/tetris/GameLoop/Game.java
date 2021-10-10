@@ -22,10 +22,10 @@ public class Game {
 	
 	private void GameStart() {
 		board.Boardsetup();		
-		board.NextPiece(Board.player1);   //all the things is start
-		board.NextPiece(Board.player2);   //all the things is start
-		board.TetrisBoard(xy1[0], xy2[1], Board.currentpiece1, Board.currentpiece1.type, Board.player1);
-		board.TetrisBoard(xy1[0], xy2[1], Board.currentpiece2, Board.currentpiece2.type, Board.player2);
+		board.NextPiece(Board.player1.getPlayer());   //all the things is start
+		board.NextPiece(Board.player2.getPlayer());   //all the things is start
+		board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece1, Board.currentpiece1.type, Board.player1.getPlayer());
+		board.TetrisBoard(xy2[0], xy2[1], Board.currentpiece2, Board.currentpiece2.type, Board.player2.getPlayer());
 	}
 	
 	public void Next(Player p) {
@@ -39,7 +39,7 @@ public class Game {
 			} else {
 				Bukkit.getScheduler().cancelTask(Execute.gameLoopID);
 				Tetris.isStart = false;
-				Board.player1.sendMessage("you loss");
+				Board.player1.getPlayer().sendMessage("you loss");
 			}
 		} else if (p.getName() == Board.player2.getName()) {
 			board.SaveTetris(xy2[0], xy2[1], p);
@@ -51,7 +51,7 @@ public class Game {
 			} else {
 				Bukkit.getScheduler().cancelTask(Execute.gameLoopID);
 				Tetris.isStart = false;
-				Board.player2.sendMessage("you loss");
+				Board.player2.getPlayer().sendMessage("you loss");
 			}
 		}
 		
@@ -85,11 +85,12 @@ public class Game {
 			if (checkCollision(xy1[0] - 1, xy1[1], p) == true) {
 				return;
 			} else {
+				Board.player1.getPlayer().sendMessage("you loss");
 				board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece1, TetrominoType.Empty, p);
 				xy1[0] -= 1;
 				board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece1, Board.currentpiece1.type, p);
 			}	
-		} else if ((p.getName() == Board.player2.getName())) {
+		} else if (p.getName() == Board.player2.getName()) {
 			if (checkCollision(xy2[0] - 1, xy2[1], p) == true) {
 				return;
 			} else {
@@ -136,7 +137,7 @@ public class Game {
 				Board.currentpiece1.rotateLeft();
 				board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece1, Board.currentpiece1.type, p);
 			}		
-		} else if ((p.getName() == Board.player2.getName())) {
+		} else if (p.getName() == Board.player2.getName()) {
 			Board.currentpiece2.rotateLeft();
 			if (checkCollision(xy2[0], xy2[1], p) == true) {
 				Board.currentpiece2.rotateRight();
@@ -164,7 +165,7 @@ public class Game {
 				Board.currentpiece1.rotateRight();
 				board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece1, Board.currentpiece1.type, p);
 			}
-		} else if ((p.getName() == Board.player2.getName())) {
+		} else if (p.getName() == Board.player2.getName()) {
 			Board.currentpiece2.rotateRight();
 			if (checkCollision(xy2[0], xy2[1], p) == true) {
 				Board.currentpiece2.rotateLeft();
@@ -187,7 +188,7 @@ public class Game {
 			board.HoldBox(p);
 			resetposition(1);
 			board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece1, Board.currentpiece1.type, p);
-		} else if ((p.getName() == Board.player2.getName())) {
+		} else if (p.getName() == Board.player2.getName()) {
 			board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece2, TetrominoType.Empty, p);
 			board.HoldBox(p);
 			resetposition(2);
@@ -212,7 +213,7 @@ public class Game {
 				}
 			}
 			return collision;
-		} else if ((p.getName() == Board.player2.getName())) {
+		} else if (p.getName() == Board.player2.getName()) {
 			boolean collision = false;
 			for(int i = 0; i < 4; i++) {
 				int coordX = x - Board.currentpiece2.coords[i][0];
@@ -248,7 +249,7 @@ public class Game {
 			} else {
 				return true;
 			}
-		} else if ((p.getName() == Board.player2.getName())) {
+		} else if (p.getName() == Board.player2.getName()) {
 			if (checkCollision(xy2[0], xy2[1] - 1, p) == true) {
 				return false;
 			} else {
@@ -263,16 +264,16 @@ public class Game {
 		if (p.getName() == Board.player1.getName()) {
 			for(int i = xy1[1]; i >= -1; i--) {  //from the position of the Tetromino first
 				if(checkCollision(xy1[0], i - 1, p) == true) { //collision occur when further move down, i.e. the previous is the allowed one
-					board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece2, TetrominoType.Empty, p);
+					board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece1, TetrominoType.Empty, p);
 					xy1[1] = i;
-					board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece2, Board.currentpiece2.type, p);
+					board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece1, Board.currentpiece1.type, p);
 					break;
 				} else {
 					continue;
 				}
 			}
 			Tetris.game.Next(p);
-		} else if ((p.getName() == Board.player2.getName())) {
+		} else if (p.getName() == Board.player2.getName()) {
 			for(int i = xy2[1]; i >= -1; i--) {  //from the position of the Tetromino first
 				if(checkCollision(xy2[0], i - 1, p) == true) { //collision occur when further move down, i.e. the previous is the allowed one
 					board.TetrisBoard(xy2[0], xy2[1], Board.currentpiece2, TetrominoType.Empty, p);
