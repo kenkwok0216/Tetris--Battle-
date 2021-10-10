@@ -36,7 +36,7 @@ public class Execute implements CommandExecutor {
 		Tetris.game = new Game(Tetris.boardclass);
 		gameLoopID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Tetris.plugin,
 							loop,
-							20, speed.ReturnSpeed(Board.getPlayerlevel()));	//Measure in takes (20 takes in second)
+							20, speed.ReturnSpeed(Board.player1.getLevel()));	//Measure in takes (20 takes in second)
 							// first number is delay 
 							//e.g. 60 means "wait for 60 takes before it start"
 							//the second number is interval

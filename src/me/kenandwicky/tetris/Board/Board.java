@@ -11,11 +11,16 @@ import me.kenandwicky.tetris.Utils;
 import me.kenandwicky.tetris.Tetromino.Tetromino;
 import me.kenandwicky.tetris.Tetromino.TetrominoType;
 import me.kenandwicky.tetris.tools.RandomClass;
+import me.kenandwicky.tetris.tools.TetrisPlayer;
 
 public class Board {
 		
 	private static SettingsManager settings;
-	public static Player player, player1, player2;
+	public static Player player;
+	
+	public static Player p1, p2;
+	public static TetrisPlayer player1, player2;
+	
 	private static TetrominoType[] bag1 = new TetrominoType[4];
 	private static TetrominoType[] bag2 = new TetrominoType[4];
 	
@@ -27,11 +32,14 @@ public class Board {
 	private static int HoldPositionX2, HoldPositionY2, HoldPositionZ2;
 	private static int BoardPositionX1, BoardPositionY1, BoardPositionZ1;
 	private static int BoardPositionX2, BoardPositionY2, BoardPositionZ2;
+	private static int ScorePositionX1, ScorePositionY1, ScorePositionZ1;
+	private static int ScorePositionX2, ScorePositionY2, ScorePositionZ2;
+	private static int LinePositionX1, LinePositionY1, LinePositionZ1;
+	private static int LinePositionX2, LinePositionY2, LinePositionZ2;
+	private static int LevelPositionX1, LevelPositionY1, LevelPositionZ1;
+	private static int LevelPositionX2, LevelPositionY2, LevelPositionZ2;
 	
-	private static int ScorePositionX, ScorePositionY, ScorePositionZ;
-	private static int LinePositionX, LinePositionY, LinePositionZ;
-	private static int LevelPositionX, LevelPositionY, LevelPositionZ;
-	private static int playerscore, playerlevel, playerline;
+	//private static int playerscore, playerlevel, playerline;
 	public static Tetromino currentpiece1, currentpiece2;
 	
 	public static Tetromino holdpiece1, holdpiece2;
@@ -371,7 +379,6 @@ public class Board {
 		NamePositionY2 = settings.getData().getInt("NamePosition2.Y");
 		NamePositionZ2 = settings.getData().getInt("NamePosition2.Z");
 		if(s == player1.getName()) {
-			
 			int x = NamePositionX1;
 			int y = NamePositionY1;
 			int z = NamePositionZ1;
@@ -408,64 +415,136 @@ public class Board {
 		}
 	}
 	
-	public static void ScoreUpdate(String s) {
-		int x = ScorePositionX;
-		int y = ScorePositionY;
-		int z = ScorePositionZ;
-		String reverse = "";
-		for(int i = s.length() - 1; i >= 0; i--) {
-			if(s.charAt(i) >= 'a' && s.charAt(i) <= 'z') {
-				reverse = reverse + (char) (s.charAt(i) - ('a' - 'A'));
-			} else {
-				reverse = reverse + s.charAt(i);
-			}	
-		}
-		for(int i = 0; i < s.length(); i++) {
-			BuildBanner(new Location(player.getWorld(), x + i, y, z), reverse.charAt(i));
-		}
-		for(int i = 0; i < 8 - s.length(); i++) {
-			BuildBanner(new Location(player.getWorld(), x + i + s.length(), y, z), '?');
-		}
+	public static void ScoreUpdate(TetrisPlayer tp) {
+		if(player1.getName() == tp.getName()) {
+			int x = ScorePositionX1;
+			int y = ScorePositionY1;
+			int z = ScorePositionZ1;
+			String s = Integer.toString(tp.getScore());
+			String reverse = "";
+			for(int i = s.length() - 1; i >= 0; i--) {
+				if(s.charAt(i) >= 'a' && s.charAt(i) <= 'z') {
+					reverse = reverse + (char) (s.charAt(i) - ('a' - 'A'));
+				} else {
+					reverse = reverse + s.charAt(i);
+				}	
+			}
+			for(int i = 0; i < s.length(); i++) {
+				BuildBanner(new Location(player.getWorld(), x + i, y, z), reverse.charAt(i));
+			}
+			for(int i = 0; i < 8 - s.length(); i++) {
+				BuildBanner(new Location(player.getWorld(), x + i + s.length(), y, z), '?');
+			}
+		} else if(player2.getName() == tp.getName()) {
+			int x = ScorePositionX2;
+			int y = ScorePositionY2;
+			int z = ScorePositionZ2;
+			String s = Integer.toString(tp.getScore());
+			String reverse = "";
+			for(int i = s.length() - 1; i >= 0; i--) {
+				if(s.charAt(i) >= 'a' && s.charAt(i) <= 'z') {
+					reverse = reverse + (char) (s.charAt(i) - ('a' - 'A'));
+				} else {
+					reverse = reverse + s.charAt(i);
+				}	
+			}
+			for(int i = 0; i < s.length(); i++) {
+				BuildBanner(new Location(player.getWorld(), x + i, y, z), reverse.charAt(i));
+			}
+			for(int i = 0; i < 8 - s.length(); i++) {
+				BuildBanner(new Location(player.getWorld(), x + i + s.length(), y, z), '?');
+			}
+		}	
+						
+
 	}
 	
-	public static void LineUpdate(String s) {
-		int x = LinePositionX;
-		int y = LinePositionY;
-		int z = LinePositionZ;
-		String reverse = "";
-		for(int i = s.length() - 1; i >= 0; i--) {
-			if(s.charAt(i) >= 'a' && s.charAt(i) <= 'z') {
-				reverse = reverse + (char) (s.charAt(i) - ('a' - 'A'));
-			} else {
-				reverse = reverse + s.charAt(i);
-			}	
-		}
-		for(int i = 0; i < s.length(); i++) {
-			BuildBanner(new Location(player.getWorld(), x + i, y, z), reverse.charAt(i));
-		}
-		for(int i = 0; i < 8 - s.length(); i++) {
-			BuildBanner(new Location(player.getWorld(), x + i + s.length(), y, z), '?');
-		}
+	public static void LineUpdate(TetrisPlayer tp) {
+		if(player1.getName() == tp.getName()) {
+			int x = LinePositionX1;
+			int y = LinePositionY1;
+			int z = LinePositionZ1;
+			String s = Integer.toString(tp.getLine());
+			String reverse = "";
+			for(int i = s.length() - 1; i >= 0; i--) {
+				if(s.charAt(i) >= 'a' && s.charAt(i) <= 'z') {
+					reverse = reverse + (char) (s.charAt(i) - ('a' - 'A'));
+				} else {
+					reverse = reverse + s.charAt(i);
+				}	
+			}
+			for(int i = 0; i < s.length(); i++) {
+				BuildBanner(new Location(player.getWorld(), x + i, y, z), reverse.charAt(i));
+			}
+			for(int i = 0; i < 8 - s.length(); i++) {
+				BuildBanner(new Location(player.getWorld(), x + i + s.length(), y, z), '?');
+			}
+		} else if(player2.getName() == tp.getName()) {
+			int x = LinePositionX2;
+			int y = LinePositionY2;
+			int z = LinePositionZ2;
+			String s = Integer.toString(tp.getLine());
+			String reverse = "";
+			for(int i = s.length() - 1; i >= 0; i--) {
+				if(s.charAt(i) >= 'a' && s.charAt(i) <= 'z') {
+					reverse = reverse + (char) (s.charAt(i) - ('a' - 'A'));
+				} else {
+					reverse = reverse + s.charAt(i);
+				}	
+			}
+			for(int i = 0; i < s.length(); i++) {
+				BuildBanner(new Location(player.getWorld(), x + i, y, z), reverse.charAt(i));
+			}
+			for(int i = 0; i < 8 - s.length(); i++) {
+				BuildBanner(new Location(player.getWorld(), x + i + s.length(), y, z), '?');
+			}
+		}	
+					
+
 	}
 	
-	public static void LevelUpdate(String s) {
-		int x = LevelPositionX;
-		int y = LevelPositionY;
-		int z = LevelPositionZ;
-		String reverse = "";
-		for(int i = s.length() - 1; i >= 0; i--) {
-			if(s.charAt(i) >= 'a' && s.charAt(i) <= 'z') {
-				reverse = reverse + (char) (s.charAt(i) - ('a' - 'A'));
-			} else {
-				reverse = reverse + s.charAt(i);
-			}	
-		}
-		for(int i = 0; i < s.length(); i++) {
-			BuildBanner(new Location(player.getWorld(), x + i, y, z), reverse.charAt(i));
-		}
-		for(int i = 0; i < 2 - s.length(); i++) {
-			BuildBanner(new Location(player.getWorld(), x + i + s.length(), y, z), '0');
-		}
+	public static void LevelUpdate(TetrisPlayer tp) {
+		if(player1.getName() == tp.getName()) {
+			int x = LevelPositionX1;
+			int y = LevelPositionY1;
+			int z = LevelPositionZ1;
+			String s = Integer.toString(tp.getLevel());
+			String reverse = "";
+			for(int i = s.length() - 1; i >= 0; i--) {
+				if(s.charAt(i) >= 'a' && s.charAt(i) <= 'z') {
+					reverse = reverse + (char) (s.charAt(i) - ('a' - 'A'));
+				} else {
+					reverse = reverse + s.charAt(i);
+				}	
+			}
+			for(int i = 0; i < s.length(); i++) {
+				BuildBanner(new Location(player.getWorld(), x + i, y, z), reverse.charAt(i));
+			}
+			for(int i = 0; i < 2 - s.length(); i++) {
+				BuildBanner(new Location(player.getWorld(), x + i + s.length(), y, z), '0');
+			}
+		} else if(player2.getName() == tp.getName()) {
+			int x = LevelPositionX2;
+			int y = LevelPositionY2;
+			int z = LevelPositionZ2;
+			String s = Integer.toString(tp.getLevel());
+			String reverse = "";
+			for(int i = s.length() - 1; i >= 0; i--) {
+				if(s.charAt(i) >= 'a' && s.charAt(i) <= 'z') {
+					reverse = reverse + (char) (s.charAt(i) - ('a' - 'A'));
+				} else {
+					reverse = reverse + s.charAt(i);
+				}	
+			}
+			for(int i = 0; i < s.length(); i++) {
+				BuildBanner(new Location(player.getWorld(), x + i, y, z), reverse.charAt(i));
+			}
+			for(int i = 0; i < 2 - s.length(); i++) {
+				BuildBanner(new Location(player.getWorld(), x + i + s.length(), y, z), '0');
+			
+		}	
+					
+}
 	}
 	
 	
@@ -543,9 +622,9 @@ public class Board {
 	
 	//This is done ---- Delete this line after done
 	public TetrominoType get(int x, int y, Player p) {
-		if(p.getPlayer() == player1.getPlayer()) {
+		if(p.getName() == player1.getName()) {
 			return board1[x][y];
-		} else if (p.getPlayer() == player2.getPlayer()) {
+		} else if (p.getName() == player2.getName()) {
 			return board2[x][y];
 		} else {
 			return null;
@@ -553,6 +632,7 @@ public class Board {
 		
 	}
 
+	//This is done ---- Delete this line after done
 	public void Boardsetup() {
 		settings.reloadConfig();
 		HoldPositionX1 = settings.getData().getInt("HoldPosition1.X") - 1;
@@ -566,23 +646,31 @@ public class Board {
 		BoardPositionZ1 = settings.getData().getInt("BoardPosition1.Z") + 1;
 		BoardPositionX2 = settings.getData().getInt("BoardPosition2.X");
 		BoardPositionY2 = settings.getData().getInt("BoardPosition2.Y");
-		BoardPositionZ2 = settings.getData().getInt("BoardPosition2.Z") + 1;
-		
-		ScorePositionX = settings.getData().getInt("ScorePosition.X") - 7;
-		ScorePositionY = settings.getData().getInt("ScorePosition.Y");
-		ScorePositionZ = settings.getData().getInt("ScorePosition.Z");
-		LinePositionX = settings.getData().getInt("LinePosition.X") - 7;
-		LinePositionY = settings.getData().getInt("LinePosition.Y");
-		LinePositionZ = settings.getData().getInt("LinePosition.Z"); 
-		LevelPositionX = settings.getData().getInt("LevelPosition.X") - 1;
-		LevelPositionY = settings.getData().getInt("LevelPosition.Y");
-		LevelPositionZ = settings.getData().getInt("LevelPosition.Z"); 
-		playerscore = 0;
-		ScoreUpdate("0");
-		playerlevel = 0;
-		LevelUpdate("0");
-		playerline = 0;
-		LineUpdate("0");
+		BoardPositionZ2 = settings.getData().getInt("BoardPosition2.Z") + 1;		
+		ScorePositionX1 = settings.getData().getInt("ScorePosition1.X") - 7;
+		ScorePositionY1 = settings.getData().getInt("ScorePosition1.Y");
+		ScorePositionZ1 = settings.getData().getInt("ScorePosition1.Z");
+		ScorePositionX2 = settings.getData().getInt("ScorePosition2.X") - 7;
+		ScorePositionY2 = settings.getData().getInt("ScorePosition2.Y");
+		ScorePositionZ2 = settings.getData().getInt("ScorePosition2.Z");		
+		LinePositionX1 = settings.getData().getInt("LinePosition1.X") - 7;
+		LinePositionY1 = settings.getData().getInt("LinePosition1.Y");
+		LinePositionZ1 = settings.getData().getInt("LinePosition1.Z");
+		LinePositionX2 = settings.getData().getInt("LinePosition2.X") - 7;
+		LinePositionY2 = settings.getData().getInt("LinePosition2.Y");
+		LinePositionZ2 = settings.getData().getInt("LinePosition2.Z");
+		LevelPositionX1 = settings.getData().getInt("LevelPosition1.X") - 1;
+		LevelPositionY1 = settings.getData().getInt("LevelPosition1.Y");
+		LevelPositionZ1 = settings.getData().getInt("LevelPosition1.Z");	
+		LevelPositionX2 = settings.getData().getInt("LevelPosition2.X") - 1;
+		LevelPositionY2 = settings.getData().getInt("LevelPosition2.Y");
+		LevelPositionZ2 = settings.getData().getInt("LevelPosition2.Z"); 
+		ScoreUpdate(player1);
+		ScoreUpdate(player2);
+		LevelUpdate(player1);
+		LevelUpdate(player2);
+		LineUpdate(player1);
+		LineUpdate(player2);
 		for(int i = 0; i < 10; i++) {
 			for(int j = 0; j < 21; j++) {
 				board1[i][j] = TetrominoType.Empty;
@@ -597,6 +685,7 @@ public class Board {
 		ClearPieceinBox(HoldPositionX2 + 1, HoldPositionY2, HoldPositionZ2); //due to rotation, the position may be larger
 	}
 
+	//This is done ---- Delete this line after done
 	public static void LineCheck(Player p) {
 		if(p.getName() == player1.getName()) {
 			int linecheck = 0;
@@ -610,7 +699,7 @@ public class Board {
 					}
 				}
 			}
-			ScoreCalculation(linecheck);
+			ScoreCalculation(linecheck, player1);
 		} else if (p.getName() == player2.getName()) {
 			int linecheck = 0;
 			for (int i = 19; i >= 0; i--) {
@@ -623,37 +712,38 @@ public class Board {
 					}
 				}
 			}
-			ScoreCalculation(linecheck);
+			ScoreCalculation(linecheck, player2);
 		}
 
 	}
 	
-	private static void ScoreCalculation(int line) {
+	//This is done ---- Delete this line after done
+	private static void ScoreCalculation(int line, TetrisPlayer tp) {
 		if (line == 0) {
 			return;
 		} else if (line == 1) {
-			playerscore += 40 * (getPlayerlevel() + 1);
-			playerline += 1;
+			tp.setScore(tp.getScore() + 40 * tp.getLevel() + 1);
+			tp.setLine(tp.getLine() + 1);
 		} else if (line == 2) {
-			playerscore += 100 * (getPlayerlevel() + 1);
-			playerline += 2;
+			tp.setScore(tp.getScore() + 100 * tp.getLevel() + 1);
+			tp.setLine(tp.getLine() + 2);
 		} else if (line == 3) {
-			playerscore += 300 * (getPlayerlevel() + 1);
-			playerline += 3;
+			tp.setScore(tp.getScore() + 300 * tp.getLevel() + 1);
+			tp.setLine(tp.getLine() + 3);
 		} else if (line == 4) {
-			playerscore += 1200 * (getPlayerlevel() + 1);
-			playerline += 4;
+			tp.setScore(tp.getScore() + 1200 * tp.getLevel() + 1);
+			tp.setLine(tp.getLine() + 4);
 		} 
-		ScoreUpdate(Integer.toString(playerscore));
-		LineUpdate(Integer.toString(playerline));
-		if(isLevelNeedUpdate(playerlevel) == true) {
-			playerlevel += 1;
-			LevelUpdate(Integer.toString(getPlayerlevel()));
+		ScoreUpdate(tp);
+		LineUpdate(tp);
+		if(isLevelNeedUpdate(tp.getLevel(), tp) == true) {
+			tp.setLevel(tp.getLevel() + 1);
+			LevelUpdate(tp);
 		}
 	}
 	
 	
-	private static boolean isLevelNeedUpdate(int level) {
+	private static boolean isLevelNeedUpdate(int level, TetrisPlayer tp) {
 		int[] updatelevel = {10, 30, 60, 100, 150, 210, 280, 360, 450, 550, 650, 750, 850, 950, 1050, 1150, 1250, 1360, 1480, 1610, 99999999};
 		/*
 		 * Level  / line needed to update // Level  / line needed to update 
@@ -668,13 +758,14 @@ public class Board {
 		 *   8				90				  18			130
 		 *   9			   100				  19			max
 		 */
-		if(playerline >= updatelevel[level] ) {
+		if(tp.getLine() >= updatelevel[level] ) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
+	//This is done ---- Delete this line after done
 	//the following method is used to clear the whole line of the board
 	public static void ClearLine(int line, Player p) {
 		if(p.getName() == player1.getName()) {
@@ -695,9 +786,6 @@ public class Board {
 
 	}
 
-	public static int getPlayerlevel() {
-		return playerlevel;
-	}
 
 
 	public static boolean CheckLoss() {

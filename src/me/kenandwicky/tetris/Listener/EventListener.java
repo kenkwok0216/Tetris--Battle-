@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import me.kenandwicky.tetris.GameLoop.Game;
+import me.kenandwicky.tetris.tools.TetrisPlayer;
 import me.kenandwicky.tetris.Tetris;
 import me.kenandwicky.tetris.Board.Board;
 import me.kenandwicky.tetris.Board.SettingsManager;
@@ -41,9 +42,9 @@ public class EventListener implements Listener {
     	Board.initialize(e.getPlayer(), settings);
     	if (e.getPlayer().getGameMode() == GameMode.ADVENTURE || 1 == 1) {
     		if(Bukkit.getOnlinePlayers().size() == 1) {
-    			Board.player1 = e.getPlayer();  
+    			Board.player1 = new TetrisPlayer(e.getPlayer()); 
     		} else {
-    			Board.player2 = e.getPlayer();
+    			Board.player2 = new TetrisPlayer(e.getPlayer()); 
     		}
     		Board.NameUpdate(e.getPlayer().getName());
     		ItemStack item = new ItemStack(Material.STICK, 1);
