@@ -722,16 +722,16 @@ public class Board {
 		if (line == 0) {
 			return;
 		} else if (line == 1) {
-			tp.setScore(tp.getScore() + 40 * tp.getLevel() + 1);
+			tp.setScore(tp.getScore() + 40 * (tp.getLevel() + 1));
 			tp.setLine(tp.getLine() + 1);
 		} else if (line == 2) {
-			tp.setScore(tp.getScore() + 100 * tp.getLevel() + 1);
+			tp.setScore(tp.getScore() + 100 * (tp.getLevel() + 1));
 			tp.setLine(tp.getLine() + 2);
 		} else if (line == 3) {
-			tp.setScore(tp.getScore() + 300 * tp.getLevel() + 1);
+			tp.setScore(tp.getScore() + 300 * (tp.getLevel() + 1));
 			tp.setLine(tp.getLine() + 3);
 		} else if (line == 4) {
-			tp.setScore(tp.getScore() + 1200 * tp.getLevel() + 1);
+			tp.setScore(tp.getScore() + 1200 * (tp.getLevel() + 1));
 			tp.setLine(tp.getLine() + 4);
 		} 
 		ScoreUpdate(tp);

@@ -37,7 +37,7 @@ public class Game {
 				board.NextPiece(p);
 				board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece1, Board.currentpiece1.type, p);
 			} else {
-				Bukkit.getScheduler().cancelTask(Execute.gameLoopID);
+				Bukkit.getScheduler().cancelTask(Execute.gameLoopID1);
 				Tetris.isStart = false;
 				Board.player1.getPlayer().sendMessage("you loss");
 			}
@@ -49,7 +49,7 @@ public class Game {
 				board.NextPiece(p);
 				board.TetrisBoard(xy2[0], xy2[1], Board.currentpiece2, Board.currentpiece2.type, p);
 			} else {
-				Bukkit.getScheduler().cancelTask(Execute.gameLoopID);
+				Bukkit.getScheduler().cancelTask(Execute.gameLoopID2);
 				Tetris.isStart = false;
 				Board.player2.getPlayer().sendMessage("you loss");
 			}
