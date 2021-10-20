@@ -10,8 +10,9 @@ import me.kenandwicky.tetris.Board.Board;
 
 public class Execute implements CommandExecutor {
 
-	public static int gameLoopID = -1; //gameLoopId return -1 when failed
-	public static Loop loop;
+	public static int gameLoopID1 = -1, gameLoopID2 = -1; //gameLoopId return -1 when failed
+	public static Loop1 loop1;
+	public static Loop2 loop2;
 	public static Speed speed;
 	public static boolean isGameGoing = false;
 	
@@ -26,21 +27,30 @@ public class Execute implements CommandExecutor {
 		
 		
 		
-		if (gameLoopID != -1) {
-			Bukkit.getScheduler().cancelTask(gameLoopID);
+		if (gameLoopID1 != -1) {
+			Bukkit.getScheduler().cancelTask(gameLoopID1);
 		}
 		
-		loop = new Loop();
+		if (gameLoopID2 != -1) {
+			Bukkit.getScheduler().cancelTask(gameLoopID2);
+		}
+		
+		loop1 = new Loop1();
+		loop2 = new Loop2();
+		
 		speed = new Speed();
 		Tetris.isStart = true;
 		Tetris.game = new Game(Tetris.boardclass);
-		gameLoopID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Tetris.plugin,
-							loop,
+		gameLoopID1 = Bukkit.getScheduler().scheduleSyncRepeatingTask(Tetris.plugin,
+							loop1,
 							20, speed.ReturnSpeed(Board.player1.getLevel()));	//Measure in takes (20 takes in second)
 							// first number is delay 
 							//e.g. 60 means "wait for 60 takes before it start"
 							//the second number is interval
 							//e.g. 20 means for every 20 takes. it will run "loop"
+		gameLoopID2 = Bukkit.getScheduler().scheduleSyncRepeatingTask(Tetris.plugin,
+						   loop2,
+				           20, speed.ReturnSpeed(Board.player2.getLevel()));
 		return true;
 	}	
 }
