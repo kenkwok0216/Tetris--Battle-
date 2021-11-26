@@ -1,6 +1,7 @@
 package me.kenandwicky.tetris.GameLoop;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.kenandwicky.tetris.Tetris;
@@ -33,29 +34,49 @@ public class Game {
 			board.SaveTetris(xy1[0], xy1[1], p);
 			resetposition(1);
 			LineChecker(p);
-			if (Board.CheckLoss() == false) {
+			if (Board.CheckLoss(p) == false) {
 				board.NextPiece(p);
 				board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece1, Board.currentpiece1.type, p);
 			} else {
 				Bukkit.getScheduler().cancelTask(Execute.gameLoopID1);
-				Tetris.isStart = false;
-				Board.player1.getPlayer().sendMessage("you loss");
+				Board.player1loss = true;
+				if(Board.player2loss == false) {
+					p.sendTitle(ChatColor.AQUA + "Game Over, Wait until opponent to end", ChatColor.YELLOW + "Your Score is " + Board.player1.getScore(), 10, 100, 10);
+				} else {
+					sendResultMessage();
+				}
 			}
 		} else if (p.getName() == Board.player2.getName()) {
 			board.SaveTetris(xy2[0], xy2[1], p);
 			resetposition(2);
 			LineChecker(p);
-			if (Board.CheckLoss() == false) {
+			if (Board.CheckLoss(p) == false) {
 				board.NextPiece(p);
 				board.TetrisBoard(xy2[0], xy2[1], Board.currentpiece2, Board.currentpiece2.type, p);
 			} else {
 				Bukkit.getScheduler().cancelTask(Execute.gameLoopID2);
-				Tetris.isStart = false;
-				Board.player2.getPlayer().sendMessage("you loss");
+				Board.player2loss = true;
+				if(Board.player1loss == false) {
+					p.sendTitle(ChatColor.AQUA + "Game Over, Wait until opponent to end", ChatColor.YELLOW + "Your Score is " + Board.player2.getScore(), 10, 100, 10);
+				} else {
+					sendResultMessage();
+				}
 			}
 		}
-		
+	}
 
+	private void sendResultMessage() {
+		if(Board.player1.getScore() > Board.player2.getScore()) {
+			Board.player1.getPlayer().sendTitle(ChatColor.AQUA + "Congradulation!!", ChatColor.YELLOW + "Your Score is " + Board.player1.getScore() , 10, 100, 10);
+			Board.player2.getPlayer().sendTitle(ChatColor.RED + "You Loss!", ChatColor.YELLOW + "Your Score is " + Board.player2.getScore() , 10, 100, 10);
+		} else if(Board.player1.getScore() == Board.player2.getScore()){
+			Board.player1.getPlayer().sendTitle(ChatColor.AQUA + "DRAW!", ChatColor.YELLOW + "Your Score is " + Board.player1.getScore() , 10, 100, 10);
+			Board.player2.getPlayer().sendTitle(ChatColor.AQUA + "DRAW!", ChatColor.YELLOW + "Your Score is " + Board.player2.getScore(), 10, 100, 10);
+		} else {
+			Board.player1.getPlayer().sendTitle(ChatColor.RED + "You Loss!", ChatColor.YELLOW + "Your Score is " + Board.player1.getScore() , 10, 100, 10);
+			Board.player2.getPlayer().sendTitle(ChatColor.AQUA + "Congradulation!!", ChatColor.YELLOW + "Your Score is " + Board.player2.getScore() , 10, 100, 10);
+		}
+		
 	}
 
 	public static void moveDown(Player p) {
@@ -85,7 +106,6 @@ public class Game {
 			if (checkCollision(xy1[0] - 1, xy1[1], p) == true) {
 				return;
 			} else {
-				Board.player1.getPlayer().sendMessage("you loss");
 				board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece1, TetrominoType.Empty, p);
 				xy1[0] -= 1;
 				board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece1, Board.currentpiece1.type, p);

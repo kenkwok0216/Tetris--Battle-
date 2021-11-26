@@ -39,6 +39,9 @@ public class Board {
 	private static int LevelPositionX1, LevelPositionY1, LevelPositionZ1;
 	private static int LevelPositionX2, LevelPositionY2, LevelPositionZ2;
 	
+	public static boolean player1loss;
+	public static boolean player2loss;
+	
 	//private static int playerscore, playerlevel, playerline;
 	public static Tetromino currentpiece1, currentpiece2;
 	
@@ -156,7 +159,7 @@ public class Board {
 	}
 	
 	
-	//This is done ---- Delete this line after done
+
 	public void NextPiece(Player p) {
 		if (p.getName() == player1.getName()) {
 			if (bag1[0] == null) {
@@ -239,7 +242,7 @@ public class Board {
         }
 	}
 	
-	//This is done ---- Delete this line after done
+
 	public void HoldBox(Player p) {
 		if(p.getName() == player1.getName()) {
 			if(isHold1 == false) {
@@ -367,7 +370,7 @@ public class Board {
 		}		
 	}
 	
-	//This is done ---- Delete this line after done
+
 	public static void NameUpdate(String s) {
 		String reverse = "";
 		//name position 1
@@ -554,7 +557,7 @@ public class Board {
 			Board.player = player;
 	}
 	
-	//This is done ---- Delete this line after done
+
 	public void TetrisBoard(int boardX, int boardY, Tetromino piece, TetrominoType type, Player p) {
 		if(p.getName() == player1.getName()) {
 			int x = settings.getData().getInt("BoardPosition1.X");
@@ -570,7 +573,7 @@ public class Board {
 	
 	}
 	
-	//This is done ---- Delete this line after done
+
 	public void SaveTetris(int boardX, int boardY, Player p) {
     	if(p.getName() == player1.getName()) {
     		for (int i = 0; i < 4; i++) {
@@ -620,7 +623,7 @@ public class Board {
 		}
 	}
 	
-	//This is done ---- Delete this line after done
+
 	public TetrominoType get(int x, int y, Player p) {
 		if(p.getName() == player1.getName()) {
 			return board1[x][y];
@@ -632,7 +635,7 @@ public class Board {
 		
 	}
 
-	//This is done ---- Delete this line after done
+
 	public void Boardsetup() {
 		settings.reloadConfig();
 		HoldPositionX1 = settings.getData().getInt("HoldPosition1.X") - 1;
@@ -664,13 +667,21 @@ public class Board {
 		LevelPositionZ1 = settings.getData().getInt("LevelPosition1.Z");	
 		LevelPositionX2 = settings.getData().getInt("LevelPosition2.X") - 1;
 		LevelPositionY2 = settings.getData().getInt("LevelPosition2.Y");
-		LevelPositionZ2 = settings.getData().getInt("LevelPosition2.Z"); 
+		LevelPositionZ2 = settings.getData().getInt("LevelPosition2.Z");
+		player1.setLevel(0);
+		player2.setLevel(0);
+		player1.setScore(0);
+		player1.setScore(0);
+		player1.setLine(0);
+		player1.setLine(0);		
 		ScoreUpdate(player1);
 		ScoreUpdate(player2);
 		LevelUpdate(player1);
 		LevelUpdate(player2);
 		LineUpdate(player1);
 		LineUpdate(player2);
+		player1loss = false;
+		player2loss = false;
 		for(int i = 0; i < 10; i++) {
 			for(int j = 0; j < 21; j++) {
 				board1[i][j] = TetrominoType.Empty;
@@ -685,7 +696,7 @@ public class Board {
 		ClearPieceinBox(HoldPositionX2 + 1, HoldPositionY2, HoldPositionZ2); //due to rotation, the position may be larger
 	}
 
-	//This is done ---- Delete this line after done
+
 	public static void LineCheck(Player p) {
 		if(p.getName() == player1.getName()) {
 			int linecheck = 0;
@@ -717,7 +728,7 @@ public class Board {
 
 	}
 	
-	//This is done ---- Delete this line after done
+
 	private static void ScoreCalculation(int line, TetrisPlayer tp) {
 		if (line == 0) {
 			return;
@@ -765,7 +776,7 @@ public class Board {
 		}
 	}
 
-	//This is done ---- Delete this line after done
+
 	//the following method is used to clear the whole line of the board
 	public static void ClearLine(int line, Player p) {
 		if(p.getName() == player1.getName()) {
@@ -788,24 +799,38 @@ public class Board {
 
 
 
-	public static boolean CheckLoss() {
-		/*
-		for(int i = 0; i < 10; i++) {
-			if(board[i][20] != TetrominoType.Empty) {
-				return true;
-			} 
-		}
-		for(int i = 0; i < 4; i++) {
-			int coordX = 3 - new Tetromino(bag[0]).coords[i][0];
-			int coordY = 17 + new Tetromino(bag[0]).coords[i][1];
-			if(board[coordX][coordY] != TetrominoType.Empty) {
-				return true;
+	public static boolean CheckLoss(Player p) {
+		if(p.getName() == player1.getName()) {
+			for(int i = 0; i < 10; i++) {
+				if(board1[i][20] != TetrominoType.Empty) {
+					return true;
+				} 
+			}
+			for(int i = 0; i < 4; i++) {
+				int coordX = 3 - new Tetromino(bag1[0]).coords[i][0];
+				int coordY = 17 + new Tetromino(bag1[0]).coords[i][1];
+				if(board1[coordX][coordY] != TetrominoType.Empty) {
+					return true;
+				}
+			}
+		} else if(p.getName() == player2.getName()) {
+			for(int i = 0; i < 10; i++) {
+				if(board2[i][20] != TetrominoType.Empty) {
+					return true;
+				} 
+			}
+			for(int i = 0; i < 4; i++) {
+				int coordX = 3 - new Tetromino(bag2[0]).coords[i][0];
+				int coordY = 17 + new Tetromino(bag2[0]).coords[i][1];
+				if(board2[coordX][coordY] != TetrominoType.Empty) {
+					return true;
+				}
 			}
 		}
+
 		
 		return false;
-		*/
-		return false;
+
 	}
 	
 }
