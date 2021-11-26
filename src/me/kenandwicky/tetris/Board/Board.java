@@ -667,7 +667,13 @@ public class Board {
 		LevelPositionZ1 = settings.getData().getInt("LevelPosition1.Z");	
 		LevelPositionX2 = settings.getData().getInt("LevelPosition2.X") - 1;
 		LevelPositionY2 = settings.getData().getInt("LevelPosition2.Y");
-		LevelPositionZ2 = settings.getData().getInt("LevelPosition2.Z"); 
+		LevelPositionZ2 = settings.getData().getInt("LevelPosition2.Z");
+		player1.setLevel(0);
+		player2.setLevel(0);
+		player1.setScore(0);
+		player1.setScore(0);
+		player1.setLine(0);
+		player1.setLine(0);		
 		ScoreUpdate(player1);
 		ScoreUpdate(player2);
 		LevelUpdate(player1);
