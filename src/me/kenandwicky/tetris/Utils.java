@@ -14,6 +14,7 @@ public class Utils {
     		/* L    */     Material.ORANGE_CONCRETE,   		
     		/* Z    */     Material.RED_CONCRETE,
             /* S    */     Material.LIME_CONCRETE,                                               
+            /* Grey */     Material.GRAY_CONCRETE,
             /* None */     Material.AIR
     };
 	

@@ -2,7 +2,7 @@ name: TetrisBattle
 main: me.kenandwicky.tetris.Tetris
 author: KenKwokandWickyYiu
 description: A funny Tetris Game with MultiPlayer
-version: 1.0
+version: 1.1
 api-version: 1.13
 
 commands:

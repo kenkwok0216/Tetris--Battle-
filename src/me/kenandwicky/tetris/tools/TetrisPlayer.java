@@ -5,13 +5,15 @@ import org.bukkit.entity.Player;
 public class TetrisPlayer {
 	
 	Player player;
-	private int score, level, line;
+	private int score, level, line, attackline;
+	private TetrisPlayer opponent;
 	
 	public TetrisPlayer(Player player) {
 		this.player = player;
 		this.score = 0;
 		this.level = 0;
 		this.line = 0;
+		this.attackline = 0;
 	}
 	
 	public String getName() {
@@ -45,5 +47,22 @@ public class TetrisPlayer {
 	public void setLine(int line) {
 		this.line = line;
 	}
+	
+	public int getattackline() {
+		return attackline;
+	}
+	
+	public void setattackline(int attackline) {
+		this.attackline = attackline;
+	}
+	
+	public void setopponent(TetrisPlayer opponent) {
+		this.opponent = opponent;
+	}
+	
+	public TetrisPlayer getopponent() {
+		return opponent;
+	}
+	
 	
 }

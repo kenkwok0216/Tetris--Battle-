@@ -34,6 +34,7 @@ public class Game {
 			board.SaveTetris(xy1[0], xy1[1], p);
 			resetposition(1);
 			LineChecker(p);
+			board.attack(p);
 			if (Board.CheckLoss(p) == false) {
 				board.NextPiece(p);
 				board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece1, Board.currentpiece1.type, p);
@@ -50,6 +51,7 @@ public class Game {
 			board.SaveTetris(xy2[0], xy2[1], p);
 			resetposition(2);
 			LineChecker(p);
+			board.attack(p);
 			if (Board.CheckLoss(p) == false) {
 				board.NextPiece(p);
 				board.TetrisBoard(xy2[0], xy2[1], Board.currentpiece2, Board.currentpiece2.type, p);

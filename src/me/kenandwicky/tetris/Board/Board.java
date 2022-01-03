@@ -1,5 +1,7 @@
 package me.kenandwicky.tetris.Board;
 
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -590,6 +592,32 @@ public class Board {
     	}
 	}
 	
+	public void attack(Player p) {
+		if(p.getName() == player1.getName()) {
+			if(player1.getopponent().getattackline() >= 3) {
+				player1.getopponent().setattackline(0);
+				AttackPlayer(p);
+			}
+		} else if(p.getName() == player2.getName()) {
+			if(player2.getopponent().getattackline() >= 3) {
+				player2.getopponent().setattackline(0);
+				AttackPlayer(p);
+			}
+		}
+	}
+	
+	public void AttackPlayer(Player p) {
+		if(p.getName() == player1.getName()) {
+			Random rnd = new Random();
+			int line = rnd.nextInt(3) + 1;
+			AddLine(line, p);
+		} else if(p.getName() == player2.getName()) {
+			Random rnd = new Random();
+			int line = rnd.nextInt(3) + 1;
+			AddLine(line, p);
+		}
+	}
+	
 	
 	//The East and West 
 	private String PlayerDirection(Player player) {
@@ -680,8 +708,12 @@ public class Board {
 		LevelUpdate(player2);
 		LineUpdate(player1);
 		LineUpdate(player2);
+		player1.setattackline(0);
+		player2.setattackline(0);
 		player1loss = false;
 		player2loss = false;
+		player1.setopponent(player2);
+		player2.setopponent(player1);
 		for(int i = 0; i < 10; i++) {
 			for(int j = 0; j < 21; j++) {
 				board1[i][j] = TetrominoType.Empty;
@@ -735,15 +767,19 @@ public class Board {
 		} else if (line == 1) {
 			tp.setScore(tp.getScore() + 40 * (tp.getLevel() + 1));
 			tp.setLine(tp.getLine() + 1);
+			tp.setattackline(tp.getattackline() + 1);
 		} else if (line == 2) {
 			tp.setScore(tp.getScore() + 100 * (tp.getLevel() + 1));
 			tp.setLine(tp.getLine() + 2);
+			tp.setattackline(tp.getattackline() + 2);
 		} else if (line == 3) {
 			tp.setScore(tp.getScore() + 300 * (tp.getLevel() + 1));
 			tp.setLine(tp.getLine() + 3);
+			tp.setattackline(tp.getattackline() + 3);
 		} else if (line == 4) {
 			tp.setScore(tp.getScore() + 1200 * (tp.getLevel() + 1));
 			tp.setLine(tp.getLine() + 4);
+			tp.setattackline(tp.getattackline() + 4);
 		} 
 		ScoreUpdate(tp);
 		LineUpdate(tp);
@@ -794,6 +830,98 @@ public class Board {
 				}
 			}
 		}
+	}
+	
+	//the following method is used to clear the whole line of the board
+	public static void AddLine(int line, Player p) {
+		player1.getPlayer().sendMessage("1");
+		while (line > 0) {
+			if(p.getName() == player1.getName()) {
+				boolean goon = true;
+				for(int i = 0; i < 10; i++) {  //to check to top most line have block or not
+					if(board1[i][19] != TetrominoType.Empty) {
+						goon = false;
+						line = 0;
+					}
+				}			
+				if(goon == true) {
+					for (int i = 0; i < 10; i++) {
+						for (int j = 18; j >= 0; j--) {
+							board1[i][j + 1] = board1[i][j];
+							setBlock(BoardPositionX1 - i, BoardPositionY1 + j + 1, BoardPositionZ1, board1[i][j]);	
+						}
+					}
+					Random rnd = new Random();
+					int x = rnd.nextInt(10);
+					for(int i = 0; i < 10; i++) {
+						board1[i][0] = TetrominoType.G;
+						if(i == x) {
+							board1[i][0] = TetrominoType.Empty;
+						}
+						setBlock(BoardPositionX1 - i, BoardPositionY1, BoardPositionZ1, board1[i][0]);	
+					}
+				} else {
+					for (int i = 0; i < 10; i++) {
+						for (int j = 19; j >= 0; j--) {
+							board1[i][j + 1] = board1[i][j];
+							setBlock(BoardPositionX1 - i, BoardPositionY1 + j + 1, BoardPositionZ1, board1[i][j]);	
+						}
+					}
+					Random rnd = new Random();
+					int x = rnd.nextInt(10);
+					for(int i = 0; i < 10; i++) {
+						board1[i][0] = TetrominoType.G;
+						if(i == x) {
+							board1[i][0] = TetrominoType.Empty;
+						}
+						setBlock(BoardPositionX1 - i, BoardPositionY1, BoardPositionZ1, board1[i][0]);	
+					}
+				}
+			} else if(p.getName() == player2.getName()) {
+				boolean goon = true;
+				for(int i = 0; i < 10; i++) {  //to check to top most line have block or not
+					if(board2[i][19] != TetrominoType.Empty) {
+						goon = false;
+						line = 0;
+					}
+				}			
+				if(goon == true) {
+					for (int i = 0; i < 10; i++) {
+						for (int j = 18; j >= 0; j--) {
+							board2[i][j + 1] = board2[i][j];
+							setBlock(BoardPositionX2 - i, BoardPositionY2 + j + 1, BoardPositionZ2, board2[i][j]);	
+						}
+					}
+					Random rnd = new Random();
+					int x = rnd.nextInt(10);
+					for(int i = 0; i < 10; i++) {
+						board2[i][0] = TetrominoType.G;
+						if(i == x) {
+							board2[i][0] = TetrominoType.Empty;
+						}
+						setBlock(BoardPositionX2 - i, BoardPositionY2, BoardPositionZ2, board2[i][0]);	
+					}
+				} else {
+					for (int i = 0; i < 10; i++) {
+						for (int j = 19; j >= 0; j--) {
+							board2[i][j + 1] = board2[i][j];
+							setBlock(BoardPositionX2 - i, BoardPositionY2 + j + 1, BoardPositionZ2, board2[i][j]);	
+						}
+					}
+					Random rnd = new Random();
+					int x = rnd.nextInt(10);
+					for(int i = 0; i < 10; i++) {
+						board2[i][0] = TetrominoType.G;
+						if(i == x) {
+							board2[i][0] = TetrominoType.Empty;
+						}
+						setBlock(BoardPositionX2 - i, BoardPositionY2, BoardPositionZ2, board2[i][0]);	
+					}
+				}
+			}
+			line--;
+		}
+		
 
 	}
 
@@ -832,5 +960,6 @@ public class Board {
 		return false;
 
 	}
+
 	
 }
