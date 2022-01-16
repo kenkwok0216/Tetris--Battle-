@@ -211,10 +211,10 @@ public class Game {
 			resetposition(1);
 			board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece1, Board.currentpiece1.type, p);
 		} else if (p.getName() == Board.player2.getName()) {
-			board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece2, TetrominoType.Empty, p);
+			board.TetrisBoard(xy2[0], xy2[1], Board.currentpiece2, TetrominoType.Empty, p);
 			board.HoldBox(p);
 			resetposition(2);
-			board.TetrisBoard(xy1[0], xy1[1], Board.currentpiece2, Board.currentpiece2.type, p);
+			board.TetrisBoard(xy2[0], xy2[1], Board.currentpiece2, Board.currentpiece2.type, p);
 		}
 
 	}

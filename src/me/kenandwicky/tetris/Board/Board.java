@@ -699,9 +699,9 @@ public class Board {
 		player1.setLevel(0);
 		player2.setLevel(0);
 		player1.setScore(0);
-		player1.setScore(0);
+		player2.setScore(0);
 		player1.setLine(0);
-		player1.setLine(0);		
+		player2.setLine(0);		
 		ScoreUpdate(player1);
 		ScoreUpdate(player2);
 		LevelUpdate(player1);
