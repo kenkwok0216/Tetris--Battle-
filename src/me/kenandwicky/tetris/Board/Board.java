@@ -834,7 +834,6 @@ public class Board {
 	
 	//the following method is used to clear the whole line of the board
 	public static void AddLine(int line, Player p) {
-		player1.getPlayer().sendMessage("1");
 		while (line > 0) {
 			if(p.getName() == player1.getName()) {
 				boolean goon = true;
