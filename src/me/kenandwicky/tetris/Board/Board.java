@@ -14,6 +14,7 @@ import me.kenandwicky.tetris.Tetromino.Tetromino;
 import me.kenandwicky.tetris.Tetromino.TetrominoType;
 import me.kenandwicky.tetris.tools.RandomClass;
 import me.kenandwicky.tetris.tools.TetrisPlayer;
+import me.kenandwicky.tetris.tools.DataEncryption;
 
 public class Board {
 		
@@ -61,12 +62,12 @@ public class Board {
 		Board.player = player;
 		if (PlayerDirection(player) == "South") {
 			Location blockloc = player.getLocation();
-			settings.getData().set("Player1Position.X", (int) blockloc.getX() - 1);
-			settings.getData().set("Player1Position.Y", (int) blockloc.getY());
-			settings.getData().set("Player1Position.Z", (int) blockloc.getZ());
-			settings.getData().set("Player2Position.X", (int) blockloc.getX() - 25);
-			settings.getData().set("Player2Position.Y", (int) blockloc.getY());
-			settings.getData().set("Player2Position.Z", (int) blockloc.getZ());			
+			settings.getData().set("Player1Position.X", DataEncryption.Encryption((int) blockloc.getX() - 1));    //encrypted
+			settings.getData().set("Player1Position.Y", DataEncryption.Encryption((int) blockloc.getY()));		  //encrpyted
+			settings.getData().set("Player1Position.Z", DataEncryption.Encryption((int) blockloc.getZ()));		 //encrpyted
+			settings.getData().set("Player2Position.X", DataEncryption.Encryption((int) blockloc.getX() - 25));  //encrpyted
+			settings.getData().set("Player2Position.Y", DataEncryption.Encryption((int) blockloc.getY()));      //encrpyted
+			settings.getData().set("Player2Position.Z", DataEncryption.Encryption((int) blockloc.getZ()));		//encrpyted	 
 			settings.saveData();
 			blockloc = new Location(player.getWorld(),(int) blockloc.getX() - 15,(int) blockloc.getY() - 17,(int) blockloc.getZ() - 7);
 			blockloc.getBlock().setType(Material.STRUCTURE_BLOCK);
@@ -80,17 +81,17 @@ public class Board {
 	public static void setup() {
 		if (settings != null) {
 			String worldname = player.getWorld().getName().toString();
-			int x = settings.getData().getInt("Player1Position.X");
-			int y = settings.getData().getInt("Player1Position.Y");
-			int z = settings.getData().getInt("Player1Position.Z");		
+			int x = DataEncryption.Decryption(settings.getData().getInt("Player1Position.X"));   //decrypted
+			int y = DataEncryption.Decryption(settings.getData().getInt("Player1Position.Y"));   //decrypted
+			int z = DataEncryption.Decryption(settings.getData().getInt("Player1Position.Z"));  //decrypted
 			Bukkit.getWorld(worldname).getBlockAt(x, y, z).setType(Material.AIR);
 			x -= 14; y -= 17; z -= 7;
 			Bukkit.getWorld(worldname).getBlockAt(x, y, z).setType(Material.AIR);
 			x -= 33;
 			Bukkit.getWorld(worldname).getBlockAt(x, y, z).setType(Material.AIR);
-			x = settings.getData().getInt("Player1Position.X") + 16;
-			y = settings.getData().getInt("Player1Position.Y") - 17;
-			z = settings.getData().getInt("Player1Position.Z") + 32;
+			x = DataEncryption.Decryption(settings.getData().getInt("Player1Position.X")) + 16; //decrypted
+			y = DataEncryption.Decryption(settings.getData().getInt("Player1Position.Y")) - 17; //decrypted
+			z = DataEncryption.Decryption(settings.getData().getInt("Player1Position.Z")) + 32; //decrypted
 			for (int i = 0; i <= 64; i++) {
 				for (int j = 0; j <= 25; j++) {
 					if (Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).getType() == Material.RED_CONCRETE) {
@@ -174,9 +175,9 @@ public class Board {
 					TetrominoType type = TetrominoType.values()[x];
 					Tetromino piece = new Tetromino(type);
 					bag1[i - 1] = type;
-					NextPositionX1 = settings.getData().getInt("NextPosition1.X") - 1;
-					NextPositionY1 = settings.getData().getInt("NextPosition1.Y") + (4-i) * 5;
-					NextPositionZ1 = settings.getData().getInt("NextPosition1.Z") + 1;
+					NextPositionX1 = DataEncryption.Decryption(settings.getData().getInt("NextPosition1.X")) - 1;          //decrpyted
+					NextPositionY1 = DataEncryption.Decryption(settings.getData().getInt("NextPosition1.Y")) + (4-i) * 5;  //decrpyted
+					NextPositionZ1 = DataEncryption.Decryption(settings.getData().getInt("NextPosition1.Z")) + 1;          //decrpyted
 					ClearPieceinBox(NextPositionX1, NextPositionY1, NextPositionZ1);
 					setPieceBlocks(NextPositionX1, NextPositionY1, NextPositionZ1, piece, type);
 				}
@@ -190,9 +191,9 @@ public class Board {
 				bag1[3] = TetrominoType.values()[x];
 				for (int i = 1; i < 5; i++) {
 					Tetromino piece = new Tetromino(bag1[i-1]);
-					NextPositionX1 = settings.getData().getInt("NextPosition1.X") - 1;
-					NextPositionY1 = settings.getData().getInt("NextPosition1.Y") + (4-i) * 5;
-					NextPositionZ1 = settings.getData().getInt("NextPosition1.Z") + 1;
+					NextPositionX1 = DataEncryption.Decryption(settings.getData().getInt("NextPosition1.X")) - 1;			  //decrpyted
+					NextPositionY1 = DataEncryption.Decryption(settings.getData().getInt("NextPosition1.Y")) + (4-i) * 5;     //decrpyted
+					NextPositionZ1 = DataEncryption.Decryption(settings.getData().getInt("NextPosition1.Z")) + 1;             //decrpyted
 					ClearPieceinBox(NextPositionX1, NextPositionY1, NextPositionZ1);
 					setPieceBlocks(NextPositionX1, NextPositionY1, NextPositionZ1, piece, bag1[i-1]);
 				}
@@ -208,9 +209,9 @@ public class Board {
 					TetrominoType type = TetrominoType.values()[x];
 					Tetromino piece = new Tetromino(type);
 					bag2[i - 1] = type;
-					NextPositionX2 = settings.getData().getInt("NextPosition2.X") - 1;
-					NextPositionY2 = settings.getData().getInt("NextPosition2.Y") + (4-i) * 5;
-					NextPositionZ2 = settings.getData().getInt("NextPosition2.Z") + 1;
+					NextPositionX2 = DataEncryption.Decryption(settings.getData().getInt("NextPosition2.X")) - 1;				//decrpyted
+					NextPositionY2 = DataEncryption.Decryption(settings.getData().getInt("NextPosition2.Y")) + (4-i) * 5;		//decrpyted
+					NextPositionZ2 = DataEncryption.Decryption(settings.getData().getInt("NextPosition2.Z")) + 1;				//decrpyted
 					ClearPieceinBox(NextPositionX2, NextPositionY2, NextPositionZ2);
 					setPieceBlocks(NextPositionX2, NextPositionY2, NextPositionZ2, piece, type);
 				}
@@ -224,9 +225,9 @@ public class Board {
 				bag2[3] = TetrominoType.values()[x];
 				for (int i = 1; i < 5; i++) {
 					Tetromino piece = new Tetromino(bag2[i-1]);
-					NextPositionX2 = settings.getData().getInt("NextPosition2.X") - 1;
-					NextPositionY2 = settings.getData().getInt("NextPosition2.Y") + (4-i) * 5;
-					NextPositionZ2 = settings.getData().getInt("NextPosition2.Z") + 1;
+					NextPositionX2 = DataEncryption.Decryption(settings.getData().getInt("NextPosition2.X")) - 1;			//decrpyted
+					NextPositionY2 = DataEncryption.Decryption(settings.getData().getInt("NextPosition2.Y")) + (4-i) * 5;	//decrpyted
+					NextPositionZ2 = DataEncryption.Decryption(settings.getData().getInt("NextPosition2.Z")) + 1;			//decrpyted
 					ClearPieceinBox(NextPositionX2, NextPositionY2, NextPositionZ2);
 					setPieceBlocks(NextPositionX2, NextPositionY2, NextPositionZ2, piece, bag2[i-1]);
 				}
@@ -352,9 +353,9 @@ public class Board {
 	
 	private static void SavePosition(String string, int x, int y, int z) {
 		if (settings != null) {
-			settings.getData().set(string + ".X", x);
-			settings.getData().set(string + ".Y", y);
-			settings.getData().set(string + ".Z", z);
+			settings.getData().set(string + ".X", DataEncryption.Encryption(x));     //encrpyted
+			settings.getData().set(string + ".Y", DataEncryption.Encryption(y));     //encrpyted
+			settings.getData().set(string + ".Z", DataEncryption.Encryption(z));     //encrpyted
 		} else {
 			settings = SettingsManager.getInstance();
 		}
@@ -376,13 +377,13 @@ public class Board {
 	public static void NameUpdate(String s) {
 		String reverse = "";
 		//name position 1
-		NamePositionX1 = settings.getData().getInt("NamePosition1.X");
-		NamePositionY1 = settings.getData().getInt("NamePosition1.Y");
-		NamePositionZ1 = settings.getData().getInt("NamePosition1.Z");
+		NamePositionX1 = DataEncryption.Decryption(settings.getData().getInt("NamePosition1.X"));    //decrypted
+		NamePositionY1 = DataEncryption.Decryption(settings.getData().getInt("NamePosition1.Y"));    //decrypted
+		NamePositionZ1 = DataEncryption.Decryption(settings.getData().getInt("NamePosition1.Z"));    //decrypted
 		//name position 2
-		NamePositionX2 = settings.getData().getInt("NamePosition2.X");
-		NamePositionY2 = settings.getData().getInt("NamePosition2.Y");
-		NamePositionZ2 = settings.getData().getInt("NamePosition2.Z");
+		NamePositionX2 = DataEncryption.Decryption(settings.getData().getInt("NamePosition2.X"));    //decrypted
+		NamePositionY2 = DataEncryption.Decryption(settings.getData().getInt("NamePosition2.Y"));    //decrypted
+		NamePositionZ2 = DataEncryption.Decryption(settings.getData().getInt("NamePosition2.Z"));    //decrypted
 		if(s == player1.getName()) {
 			int x = NamePositionX1;
 			int y = NamePositionY1;
@@ -562,14 +563,14 @@ public class Board {
 
 	public void TetrisBoard(int boardX, int boardY, Tetromino piece, TetrominoType type, Player p) {
 		if(p.getName() == player1.getName()) {
-			int x = settings.getData().getInt("BoardPosition1.X");
-			int y = settings.getData().getInt("BoardPosition1.Y");
-			int z = settings.getData().getInt("BoardPosition1.Z") + 1;
+			int x = DataEncryption.Decryption(settings.getData().getInt("BoardPosition1.X"));        //decrypted
+			int y = DataEncryption.Decryption(settings.getData().getInt("BoardPosition1.Y"));        //decrypted
+			int z = DataEncryption.Decryption(settings.getData().getInt("BoardPosition1.Z")) + 1;    //decrypted
 			setPieceBlocks(x - boardX, y + boardY, z, piece, type);	
 		} else if(p.getName() == player2.getName()) {
-			int x = settings.getData().getInt("BoardPosition2.X");
-			int y = settings.getData().getInt("BoardPosition2.Y");
-			int z = settings.getData().getInt("BoardPosition2.Z") + 1;
+			int x = DataEncryption.Decryption(settings.getData().getInt("BoardPosition2.X"));        //decrypted
+			int y = DataEncryption.Decryption(settings.getData().getInt("BoardPosition2.Y"));        //decrypted
+			int z = DataEncryption.Decryption(settings.getData().getInt("BoardPosition2.Z")) + 1;    //decrypted
 			setPieceBlocks(x - boardX, y + boardY, z, piece, type);	
 		}
 	
@@ -666,36 +667,36 @@ public class Board {
 
 	public void Boardsetup() {
 		settings.reloadConfig();
-		HoldPositionX1 = settings.getData().getInt("HoldPosition1.X") - 1;
-		HoldPositionY1 = settings.getData().getInt("HoldPosition1.Y");
-		HoldPositionZ1 = settings.getData().getInt("HoldPosition1.Z") + 1;
-		HoldPositionX2 = settings.getData().getInt("HoldPosition2.X") - 1;
-		HoldPositionY2 = settings.getData().getInt("HoldPosition2.Y");
-		HoldPositionZ2 = settings.getData().getInt("HoldPosition2.Z") + 1;
-		BoardPositionX1 = settings.getData().getInt("BoardPosition1.X");
-		BoardPositionY1 = settings.getData().getInt("BoardPosition1.Y");
-		BoardPositionZ1 = settings.getData().getInt("BoardPosition1.Z") + 1;
-		BoardPositionX2 = settings.getData().getInt("BoardPosition2.X");
-		BoardPositionY2 = settings.getData().getInt("BoardPosition2.Y");
-		BoardPositionZ2 = settings.getData().getInt("BoardPosition2.Z") + 1;		
-		ScorePositionX1 = settings.getData().getInt("ScorePosition1.X") - 7;
-		ScorePositionY1 = settings.getData().getInt("ScorePosition1.Y");
-		ScorePositionZ1 = settings.getData().getInt("ScorePosition1.Z");
-		ScorePositionX2 = settings.getData().getInt("ScorePosition2.X") - 7;
-		ScorePositionY2 = settings.getData().getInt("ScorePosition2.Y");
-		ScorePositionZ2 = settings.getData().getInt("ScorePosition2.Z");		
-		LinePositionX1 = settings.getData().getInt("LinePosition1.X") - 7;
-		LinePositionY1 = settings.getData().getInt("LinePosition1.Y");
-		LinePositionZ1 = settings.getData().getInt("LinePosition1.Z");
-		LinePositionX2 = settings.getData().getInt("LinePosition2.X") - 7;
-		LinePositionY2 = settings.getData().getInt("LinePosition2.Y");
-		LinePositionZ2 = settings.getData().getInt("LinePosition2.Z");
-		LevelPositionX1 = settings.getData().getInt("LevelPosition1.X") - 1;
-		LevelPositionY1 = settings.getData().getInt("LevelPosition1.Y");
-		LevelPositionZ1 = settings.getData().getInt("LevelPosition1.Z");	
-		LevelPositionX2 = settings.getData().getInt("LevelPosition2.X") - 1;
-		LevelPositionY2 = settings.getData().getInt("LevelPosition2.Y");
-		LevelPositionZ2 = settings.getData().getInt("LevelPosition2.Z");
+		HoldPositionX1 = DataEncryption.Decryption(settings.getData().getInt("HoldPosition1.X")) - 1;    //decrpyted
+		HoldPositionY1 = DataEncryption.Decryption(settings.getData().getInt("HoldPosition1.Y"));    	 //decrpyted
+		HoldPositionZ1 = DataEncryption.Decryption(settings.getData().getInt("HoldPosition1.Z")) + 1;	 //decrpyted
+		HoldPositionX2 = DataEncryption.Decryption(settings.getData().getInt("HoldPosition2.X")) - 1;	 //decrpyted
+		HoldPositionY2 = DataEncryption.Decryption(settings.getData().getInt("HoldPosition2.Y"));     	 //decrpyted
+		HoldPositionZ2 = DataEncryption.Decryption(settings.getData().getInt("HoldPosition2.Z")) + 1;  	 //decrpyted
+		BoardPositionX1 = DataEncryption.Decryption(settings.getData().getInt("BoardPosition1.X"));   	 //decrpyted
+		BoardPositionY1 = DataEncryption.Decryption(settings.getData().getInt("BoardPosition1.Y"));      //decrpyted
+		BoardPositionZ1 = DataEncryption.Decryption(settings.getData().getInt("BoardPosition1.Z")) + 1;  //decrpyted
+		BoardPositionX2 = DataEncryption.Decryption(settings.getData().getInt("BoardPosition2.X"));      //decrpyted
+		BoardPositionY2 = DataEncryption.Decryption(settings.getData().getInt("BoardPosition2.Y"));		//decrpyted
+		BoardPositionZ2 = DataEncryption.Decryption(settings.getData().getInt("BoardPosition2.Z")) + 1;  //decrpyted		
+		ScorePositionX1 = DataEncryption.Decryption(settings.getData().getInt("ScorePosition1.X")) - 7;  //decrpyted
+		ScorePositionY1 = DataEncryption.Decryption(settings.getData().getInt("ScorePosition1.Y"));		//decrpyted
+		ScorePositionZ1 = DataEncryption.Decryption(settings.getData().getInt("ScorePosition1.Z"));		//decrpyted
+		ScorePositionX2 = DataEncryption.Decryption(settings.getData().getInt("ScorePosition2.X")) - 7;	//decrpyted
+		ScorePositionY2 = DataEncryption.Decryption(settings.getData().getInt("ScorePosition2.Y"));		//decrpyted
+		ScorePositionZ2 = DataEncryption.Decryption(settings.getData().getInt("ScorePosition2.Z"));		//decrpyted
+		LinePositionX1 = DataEncryption.Decryption(settings.getData().getInt("LinePosition1.X")) - 7;	//decrpyted
+		LinePositionY1 = DataEncryption.Decryption(settings.getData().getInt("LinePosition1.Y"));		//decrpyted
+		LinePositionZ1 = DataEncryption.Decryption(settings.getData().getInt("LinePosition1.Z"));		//decrpyted
+		LinePositionX2 = DataEncryption.Decryption(settings.getData().getInt("LinePosition2.X")) - 7;	//decrpyted
+		LinePositionY2 = DataEncryption.Decryption(settings.getData().getInt("LinePosition2.Y"));		//decrpyted
+		LinePositionZ2 = DataEncryption.Decryption(settings.getData().getInt("LinePosition2.Z"));		//decrpyted
+		LevelPositionX1 = DataEncryption.Decryption(settings.getData().getInt("LevelPosition1.X")) - 1; //decrpyted
+		LevelPositionY1 = DataEncryption.Decryption(settings.getData().getInt("LevelPosition1.Y"));		//decrpyted
+		LevelPositionZ1 = DataEncryption.Decryption(settings.getData().getInt("LevelPosition1.Z"));		//decrpyted
+		LevelPositionX2 = DataEncryption.Decryption(settings.getData().getInt("LevelPosition2.X")) - 1; //decrpyted
+		LevelPositionY2 = DataEncryption.Decryption(settings.getData().getInt("LevelPosition2.Y"));		//decrpyted
+		LevelPositionZ2 = DataEncryption.Decryption(settings.getData().getInt("LevelPosition2.Z"));		//decrpyted
 		player1.setLevel(0);
 		player2.setLevel(0);
 		player1.setScore(0);
