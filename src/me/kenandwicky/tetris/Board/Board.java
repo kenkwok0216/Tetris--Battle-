@@ -80,10 +80,13 @@ public class Board {
 
 	public static void setup() {
 		if (settings != null) {
+			int hashcode = 0;
 			String worldname = player.getWorld().getName().toString();
 			int x = DataEncryption.Decryption(settings.getData().getInt("Player1Position.X"));   //decrypted
 			int y = DataEncryption.Decryption(settings.getData().getInt("Player1Position.Y"));   //decrypted
 			int z = DataEncryption.Decryption(settings.getData().getInt("Player1Position.Z"));  //decrypted
+			hashcode += settings.getData().getInt("Player1Position.X") + settings.getData().getInt("Player1Position.Y") + settings.getData().getInt("Player1Position.Z");
+			hashcode += settings.getData().getInt("Player2Position.X") + settings.getData().getInt("Player2Position.Y") + settings.getData().getInt("Player2Position.Z");
 			Bukkit.getWorld(worldname).getBlockAt(x, y, z).setType(Material.AIR);
 			x -= 14; y -= 17; z -= 7;
 			Bukkit.getWorld(worldname).getBlockAt(x, y, z).setType(Material.AIR);
@@ -97,64 +100,79 @@ public class Board {
 					if (Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).getType() == Material.RED_CONCRETE) {
 						if(i <= 31) {
 							SavePosition("HoldPosition1", x - i, y + j, z);
+							hashcode += DataEncryption.Encryption(x - i) +  DataEncryption.Encryption(y + j) + DataEncryption.Encryption(z);
 							Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).setType(Material.AIR);
 						} else {
 							SavePosition("HoldPosition2", x - i, y + j, z);
+							hashcode += DataEncryption.Encryption(x - i) +  DataEncryption.Encryption(y + j) + DataEncryption.Encryption(z);
 							Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).setType(Material.AIR);
 						}
 					} else if (Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).getType() == Material.ORANGE_CONCRETE) {
 						if(i <= 31) {
 							SavePosition("ScorePosition1", x - i, y + j, z);
+							hashcode += DataEncryption.Encryption(x - i) +  DataEncryption.Encryption(y + j) + DataEncryption.Encryption(z);
 							Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).setType(Material.AIR);
 						} else {
 							SavePosition("ScorePosition2", x - i, y + j, z);
+							hashcode += DataEncryption.Encryption(x - i) +  DataEncryption.Encryption(y + j) + DataEncryption.Encryption(z);
 							Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).setType(Material.AIR);
 						}												
 					} else if (Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).getType() == Material.YELLOW_CONCRETE) {
 						if(i <= 31) {
 							SavePosition("LinePosition1", x - i, y + j, z);
+							hashcode += DataEncryption.Encryption(x - i) +  DataEncryption.Encryption(y + j) + DataEncryption.Encryption(z);
 							Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).setType(Material.AIR);
 						} else {
 							SavePosition("LinePosition2", x - i, y + j, z);
+							hashcode += DataEncryption.Encryption(x - i) +  DataEncryption.Encryption(y + j) + DataEncryption.Encryption(z);
 							Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).setType(Material.AIR);
 						}
 					} else if (Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).getType() == Material.GREEN_CONCRETE) {
 						if(i <= 31) {
 							SavePosition("LevelPosition1", x - i, y + j, z);
+							hashcode += DataEncryption.Encryption(x - i) +  DataEncryption.Encryption(y + j) + DataEncryption.Encryption(z);
 							Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).setType(Material.AIR);
 						} else {
 							SavePosition("LevelPosition2", x - i, y + j, z);
+							hashcode += DataEncryption.Encryption(x - i) +  DataEncryption.Encryption(y + j) + DataEncryption.Encryption(z);
 							Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).setType(Material.AIR);
 						}	
 					} else if (Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).getType() == Material.BLUE_CONCRETE) {
 						if(i <= 31) {
 							SavePosition("BoardPosition1", x - i, y + j, z);
+							hashcode += DataEncryption.Encryption(x - i) +  DataEncryption.Encryption(y + j) + DataEncryption.Encryption(z);
 							Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).setType(Material.AIR);
 						} else {
 							SavePosition("BoardPosition2", x - i, y + j, z);
+							hashcode += DataEncryption.Encryption(x - i) +  DataEncryption.Encryption(y + j) + DataEncryption.Encryption(z);
 							Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).setType(Material.AIR);
 						}	
 					} else if (Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).getType() == Material.LIGHT_BLUE_CONCRETE) {
 						if(i <= 31) {
 							SavePosition("NextPosition1", x - i, y + j, z);
+							hashcode += DataEncryption.Encryption(x - i) +  DataEncryption.Encryption(y + j) + DataEncryption.Encryption(z);
 							Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).setType(Material.AIR);
 						} else {
 							SavePosition("NextPosition2", x - i, y + j, z);
+							hashcode += DataEncryption.Encryption(x - i) +  DataEncryption.Encryption(y + j) + DataEncryption.Encryption(z);
 							Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).setType(Material.AIR);
 						}	
 					} else if (Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).getType() == Material.PURPLE_CONCRETE) {
 						if(i <= 31) {
 							SavePosition("NamePosition1", x - i, y + j, z);
+							hashcode += DataEncryption.Encryption(x - i) +  DataEncryption.Encryption(y + j) + DataEncryption.Encryption(z);
 							Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).setType(Material.AIR);
 							BuildBanner(new Location(player.getWorld(), x - i, y + j, z), '?');
 						} else {
 							SavePosition("NamePosition2", x - i, y + j, z);
+							hashcode += DataEncryption.Encryption(x - i) +  DataEncryption.Encryption(y + j) + DataEncryption.Encryption(z);
 							Bukkit.getWorld(worldname).getBlockAt(x - i, y + j, z).setType(Material.AIR);
 							BuildBanner(new Location(player.getWorld(), x - i, y + j, z), '?');;
 						}	
 					}
 				}
 			}
+			settings.getData().set("hashcode", (Integer.toString(hashcode)).hashCode());
 			settings.saveData();
 		} else {
 			settings = SettingsManager.getInstance();
